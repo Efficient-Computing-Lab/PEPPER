@@ -3,7 +3,7 @@
 For our case to train our logistic regression model we have to provide every metric collected from profiling to the model in the x parameter. 
 In the y parameters we provide a value that characterizes a slow inference time.
 We expect from the model to find which models are slow and which are fast.
-In addition, it should provide an estimation output on which features have a major role on the inference time.
+In addition, it should provide an estimation output on which features have a major role on affecting the inference time.
 
 ### Code
 

@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, roc_auc_score, roc_curve
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
@@ -9,6 +8,7 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from xgboost import XGBClassifier # Import XGBoost classifier
 
 # --- Configuration Constants ---
 # Ensure this is correct for your environment
@@ -25,7 +25,7 @@ ALL_CSV_COLUMNS = [
 FEATURE_COLUMNS = [
     'conv_layers', 'cpu_usage_percent', 'device', 'disk_io_read_bytes',
     'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
-    'memory_usage_percent', # 'model_name', # <--- REMOVE THIS LINE
+    'memory_usage_percent',
     'network_type', 'pool_layers',
     'total_parameters'
 ]
@@ -35,12 +35,12 @@ NUMERICAL_FEATURES = [
     'memory_usage_percent', 'pool_layers', 'total_parameters'
 ]
 CATEGORICAL_FEATURES = [
-    'device', # 'model_name', # <--- REMOVE THIS LINE
+    'device',
     'network_type'
 ]
 
 
-# --- Functions (all functions below this point remain the same as your last provided code) ---
+# --- Functions ---
 
 def load_data_from_csvs(directory: str) -> pd.DataFrame | None:
     """
@@ -185,24 +185,23 @@ def preprocess_data(df: pd.DataFrame, target_col: str, threshold: float,
     print("\nFeature preprocessing setup complete (StandardScaler for numerical, OneHotEncoder for categorical).")
     return X, y, preprocessor
 
-# (train_model and evaluate_model functions are the same as before)
 def train_model(X_train: pd.DataFrame, y_train: pd.Series, preprocessor: ColumnTransformer) -> Pipeline:
     """
-    Trains a Logistic Regression model within a scikit-learn Pipeline.
+    Trains an XGBoost model within a scikit-learn Pipeline.
     """
-    print("\n--- 3. Training the Logistic Regression Model ---")
+    print("\n--- 3. Training the XGBoost Model ---")
 
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
-        ('classifier', LogisticRegression(solver='liblinear', random_state=42, max_iter=1000))
+        ('classifier', XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42))
     ])
 
     model_pipeline.fit(X_train, y_train)
-    print("Logistic Regression model (within pipeline) trained successfully.")
+    print("XGBoost model (within pipeline) trained successfully.")
     return model_pipeline
 
 def evaluate_model(model_pipeline: Pipeline, X_test: pd.DataFrame, y_test: pd.Series,
-                   categorical_features: list = None) -> None: # categorical_features is still passed for the OHE feature names
+                   numerical_features: list, categorical_features: list) -> None:
     """
     Evaluates the trained model using various classification metrics and plots.
     """
@@ -241,36 +240,36 @@ def evaluate_model(model_pipeline: Pipeline, X_test: pd.DataFrame, y_test: pd.Se
     plt.legend(loc="lower right")
     plt.grid(True)
     plt.show()
-    print("\n--- Optional: Model Coefficients Visualization ---")
+
+    # --- Feature Importance Visualization for XGBoost ---
+    print("\n--- Optional: Feature Importance Visualization (XGBoost) ---")
     try:
-        # Create a new list for OHE features excluding model_name, for visualization purposes
-        # This will ensure the get_feature_names_out call is correct after removing 'model_name'
-        # The actual categorical_features list passed to preprocessor will already be without model_name
-        # The key is to ensure the list of names matches the OHE output.
-        current_categorical_features = [f for f in CATEGORICAL_FEATURES if f != 'model_name'] # Dynamically adjust
+        # Get feature names after preprocessing
+        # This gets the names from the OneHotEncoder (for categorical features)
+        ohe_feature_names = model_pipeline.named_steps['preprocessor'].named_transformers_['cat'].get_feature_names_out(categorical_features)
+        # Combine numerical feature names with one-hot encoded feature names
+        all_processed_features = numerical_features + list(ohe_feature_names)
 
-        ohe_feature_names = model_pipeline.named_steps['preprocessor'].named_transformers_['cat'].get_feature_names_out(current_categorical_features)
-        all_processed_features = NUMERICAL_FEATURES + list(ohe_feature_names)
+        # Get feature importances from the trained XGBoost classifier
+        xgb_importances = model_pipeline.named_steps['classifier'].feature_importances_
 
-        lr_coefficients = model_pipeline.named_steps['classifier'].coef_[0]
-
-        coefficients_df = pd.DataFrame({
+        # Create a DataFrame for visualization
+        feature_importance_df = pd.DataFrame({
             'Feature': all_processed_features,
-            'Coefficient': lr_coefficients
+            'Importance': xgb_importances
         })
-        coefficients_df['Absolute Coefficient'] = np.abs(coefficients_df['Coefficient'])
-        coefficients_df = coefficients_df.sort_values(by='Absolute Coefficient', ascending=False)
+        feature_importance_df = feature_importance_df.sort_values(by='Importance', ascending=False)
 
         plt.figure(figsize=(12, 8))
-        sns.barplot(x='Coefficient', y='Feature', data=coefficients_df.head(20))
-        plt.title('Top 20 Feature Coefficients in Logistic Regression (After Preprocessing)')
-        plt.xlabel('Coefficient Value')
+        sns.barplot(x='Importance', y='Feature', data=feature_importance_df.head(20))
+        plt.title('Top 20 Feature Importances in XGBoost (After Preprocessing)')
+        plt.xlabel('Feature Importance (Gain)')
         plt.ylabel('Feature')
         plt.grid(axis='x', linestyle='--', alpha=0.7)
         plt.show()
     except Exception as e:
-        print(f"Could not visualize coefficients due to: {e}")
-        print("This often happens if categorical features are empty or not handled as expected.")
+        print(f"Could not visualize feature importances due to: {e}")
+        print("This might happen if the preprocessor or classifier structure is unexpected.")
 
 
 # --- Main Execution Flow ---
@@ -313,7 +312,7 @@ def main():
     model_pipeline = train_model(X_train, y_train, preprocessor)
 
     # Evaluate Model
-    evaluate_model(model_pipeline, X_test, y_test, CATEGORICAL_FEATURES) # Pass the original categorical_features list
+    evaluate_model(model_pipeline, X_test, y_test, NUMERICAL_FEATURES, CATEGORICAL_FEATURES)
 
 
     print("\n--- Script Execution Complete ---")

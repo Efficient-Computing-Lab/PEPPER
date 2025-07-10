@@ -1,25 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-This script demonstrates an XGBoost regression example for predicting
-the actual inference times based on system and model characteristics.
-
-It includes:
-1. Data loading from multiple CSV files in a specified directory.
-2. Data preprocessing, including converting execution time strings to numerical
-   seconds. The 'execution_time' column will now be the direct target variable.
-3. **Ten-fold cross-validation** for robust model evaluation.
-4. Initializing and training an XGBoost Regressor within a scikit-learn Pipeline,
-   which includes preprocessing steps (scaling and one-hot encoding).
-5. Saving the trained model to a file (from a single train/test split for later specific prediction).
-6. Loading the trained model in the evaluation function.
-7. Making predictions and evaluating the model's performance with regression metrics
-   (MAE, MSE, RMSE, R2-score) and visualization of predicted vs. actual values,
-   and feature importance.
-   All generated figures will now be saved to files instead of being displayed.
-8. Added a section to demonstrate how to predict inference time for a specific,
-   user-defined set of model features.
-"""
-
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
@@ -32,7 +10,7 @@ import seaborn as sns
 import os
 import joblib # Import joblib for saving/loading models
 from xgboost import XGBRegressor # Import XGBoost Regressor
-
+import random
 # --- Configuration Constants ---
 # Ensure this is correct for your environment
 # NOTE: Replace with a valid path on your system where CSVs are located.
@@ -93,6 +71,9 @@ def main():
         print(f"\nFeatures for specific model:\n{specific_model_features}")
         output = {"model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
         print(f"Predicted inference time: {output}")
+
+        select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
+        print(f"The {given_model_name} should be executed on {select_random_device}")
     except FileNotFoundError:
         print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
     except Exception as e:

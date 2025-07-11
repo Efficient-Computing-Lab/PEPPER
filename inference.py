@@ -46,12 +46,12 @@ CATEGORICAL_FEATURES = [
     #'network_type' # Include network_type for demonstration if it's in your data
 ]
 
-def model_characteristics(model_name):
+def model_characteristics(model_name,device_type):
     if model_name == "alexnet.onnx":
         characteristics = {
             'conv_layers': 5,
             'cpu_usage_percent': 45.2,
-            'device': 0, # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -64,7 +64,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 121,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -77,7 +77,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 55,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -90,7 +90,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 149,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -103,7 +103,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 57,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -116,7 +116,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 54,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -129,7 +129,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 151,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -142,7 +142,7 @@ def model_characteristics(model_name):
         characteristics = {
             'conv_layers': 13,
             'cpu_usage_percent': 45.2,
-            'device': 0,  # 0 means that the device is a RPi
+            'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
             'disk_usage_percent': 55.0,
@@ -157,32 +157,42 @@ def model_characteristics(model_name):
     return characteristics
 # --- Main Execution Flow ---
 def main():
-    parser = argparse.ArgumentParser(description="Predict inference time for a given model.")
-    parser.add_argument("model_name", help="Name of the model (e.g., vgg.onnx)")
-    args = parser.parse_args()
+
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_name = args.model_name
-    characteristics = model_characteristics(given_model_name)
-    specific_model_features = pd.DataFrame([characteristics])
+    given_model_names = ["alexnet.onnx","densenet.onnx"]
+    characteristics_list = []
+    # device_type 0 = RaspberryPi 4B
+    # device_type 1 = Jetson Nano
+    for given_model_name in given_model_names:
+        rpi_characteristics = model_characteristics(given_model_name,0)
+        jetson_characteristics = model_characteristics(given_model_name, 1)
+        characteristics_list.append(rpi_characteristics)
+        characteristics_list.append(jetson_characteristics)
 
-    specific_model_features = specific_model_features[FEATURE_COLUMNS]
+        for characteristics_entry in characteristics_list:
+            specific_model_features = pd.DataFrame([characteristics_entry])
 
-    try:
-        loaded_for_prediction_pipeline = joblib.load(model_path)
-        predicted_inference_time = loaded_for_prediction_pipeline.predict(specific_model_features)
+            specific_model_features = specific_model_features[FEATURE_COLUMNS]
 
-        print(f"\nFeatures for specific model:\n{specific_model_features}")
-        output = {"model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
-        print(f"Predicted inference time: {output}")
+            try:
+                loaded_for_prediction_pipeline = joblib.load(model_path)
+                predicted_inference_time = loaded_for_prediction_pipeline.predict(specific_model_features)
 
-        select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
-        print(f"The {given_model_name} should be executed on {select_random_device}")
-    except FileNotFoundError:
-        print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
-    except Exception as e:
-        print(f"Error making specific prediction: {e}")
+                if characteristics_entry.get("device") == 0:
+                    given_device = "RaspberryPi 4B"
+                if characteristics_entry.get("device") == 1:
+                    given_device = "Jetson Nano"
+                output = {"device": given_device, "model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
+                print(f"Predicted inference time: {output}")
 
-    print("\n--- Script Execution Complete ---")
+                select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
+                print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
+            except FileNotFoundError:
+                print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
+            except Exception as e:
+                print(f"Error making specific prediction: {e}")
+
+        print("\n--- Script Execution Complete ---")
 
 if __name__ == "__main__":
     main()

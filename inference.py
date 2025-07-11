@@ -8,9 +8,11 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import sys
 import joblib # Import joblib for saving/loading models
 from xgboost import XGBRegressor # Import XGBoost Regressor
 import random
+import argparse
 # --- Configuration Constants ---
 # Ensure this is correct for your environment
 # NOTE: Replace with a valid path on your system where CSVs are located.
@@ -44,23 +46,124 @@ CATEGORICAL_FEATURES = [
     #'network_type' # Include network_type for demonstration if it's in your data
 ]
 
-
+def model_characteristics(model_name):
+    if model_name == "alexnet.onnx":
+        characteristics = {
+            'conv_layers': 5,
+            'cpu_usage_percent': 45.2,
+            'device': 0, # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 3,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 3,
+            'total_parameters': 60965228
+        }
+    elif model_name == "densenet.onnx":
+        characteristics = {
+            'conv_layers': 121,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 5,
+            'total_parameters': 8146152
+        }
+    elif model_name == "efficientnet.onnx":
+        characteristics = {
+            'conv_layers': 55,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 1,
+            'total_parameters': 12966034
+        }
+    elif model_name == "epos.onnx":
+        characteristics = {
+            'conv_layers': 149,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 1,
+            'total_parameters': 41402464
+        }
+    elif model_name == "googlenet.onnx":
+        characteristics = {
+            'conv_layers': 57,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 14,
+            'total_parameters': 6998555
+        }
+    elif model_name == "mobilenet.onnx":
+        characteristics = {
+            'conv_layers': 54,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 1,
+            'total_parameters': 3539138
+        }
+    elif model_name == "resnet.onnx":
+        characteristics = {
+            'conv_layers': 151,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 1,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 2,
+            'total_parameters': 60404072
+        }
+    elif model_name == "vgg.onnx":
+        characteristics = {
+            'conv_layers': 13,
+            'cpu_usage_percent': 45.2,
+            'device': 0,  # 0 means that the device is a RPi
+            'disk_io_read_bytes': 15000,
+            'disk_io_write_bytes': 8000,
+            'disk_usage_percent': 55.0,
+            'fully_conn_layers': 3,
+            'memory_usage_percent': 70.0,
+            'pool_layers': 5,
+            'total_parameters': 138357544
+        }
+    else:
+        print("You provided a wrong model")
+        sys.exit(0)
+    return characteristics
 # --- Main Execution Flow ---
 def main():
+    parser = argparse.ArgumentParser(description="Predict inference time for a given model.")
+    parser.add_argument("model_name", help="Name of the model (e.g., vgg.onnx)")
+    args = parser.parse_args()
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_name = "ONNX-model"
-    specific_model_features = pd.DataFrame([{
-        'conv_layers': 7,
-        'cpu_usage_percent': 45.2,
-        'device': 0, # 0 means that the device is a RPi
-        'disk_io_read_bytes': 15000,
-        'disk_io_write_bytes': 8000,
-        'disk_usage_percent': 55.0,
-        'fully_conn_layers': 3,
-        'memory_usage_percent': 70.0,
-        'pool_layers': 4,
-        'total_parameters': 25000000
-    }])
+    given_model_name = args.model_name
+    characteristics = model_characteristics(given_model_name)
+    specific_model_features = pd.DataFrame([characteristics])
 
     specific_model_features = specific_model_features[FEATURE_COLUMNS]
 

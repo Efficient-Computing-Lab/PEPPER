@@ -159,7 +159,7 @@ def model_characteristics(model_name,device_type):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["alexnet.onnx","densenet.onnx"]
+    given_model_names = ["alexnet.onnx","densenet.onnx","efficientnet.onnx", "epos.onnx", "googlenet.onnx", "mobilenet.onnx","resnet.onnx","vgg.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
@@ -191,7 +191,7 @@ def main():
                 print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
             except Exception as e:
                 print(f"Error making specific prediction: {e}")
-
+        characteristics_list.clear()
         print("\n--- Script Execution Complete ---")
 
 if __name__ == "__main__":

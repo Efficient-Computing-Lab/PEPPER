@@ -22,22 +22,22 @@ CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
 TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
 
 ALL_CSV_COLUMNS = [
-    'conv_layers', 'cpu_usage_percent', 'device', 'disk_io_read_bytes',
+    'conv_layers', 'total_cpu_usage_percent','device_cpu_cores', 'device_load_percent' 'device', 'device_disk_io_read_bytes',
     'disk_io_write_bytes', 'disk_usage_percent', 'end_timestamp', 'execution_number',
-    'execution_time', 'filter_details', 'fully_conn_layers', 'memory_usage_percent',
-    #'network_type'
+    'execution_time', 'filter_details', 'fully_conn_layers', 'total_memory_usage_percent',
+
     'pool_layers', 'start_timestamp', 'total_parameters'
 ]
 FEATURE_COLUMNS = [
-    'conv_layers', 'cpu_usage_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
-    'memory_usage_percent',
-    #'network_type', # Include network_type for demonstration if it's in your data
+    'conv_layers', 'device_load_percent', 'device', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
+    'total_memory_usage_percent',
+
     'pool_layers',
     'total_parameters'
 ]
 NUMERICAL_FEATURES = [
-    'conv_layers', 'cpu_usage_percent', 'disk_io_read_bytes',
+    'conv_layers', 'cpu_usage_percent', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
     'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
     'memory_usage_percent', 'pool_layers', 'total_parameters'
 ]

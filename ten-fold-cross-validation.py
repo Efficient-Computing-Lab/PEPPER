@@ -42,30 +42,27 @@ CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
 TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
 MODEL_PATH = 'best_trained_xgboost_model.joblib' # Path to save/load the trained model
 ALL_CSV_COLUMNS = [
-    'conv_layers', 'cpu_usage_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'disk_usage_percent', 'end_timestamp', 'execution_number',
-    'execution_time', 'filter_details', 'fully_conn_layers', 'memory_usage_percent',
-    #'network_type'
+    'conv_layers', 'total_cpu_usage_percent','device_cpu_cores', 'device_load_percent', 'device', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_disk_usage_percent', 'end_timestamp', 'execution_number',
+    'execution_time', 'filter_details', 'fully_conn_layers', 'total_memory_usage_percent',
+
     'pool_layers', 'start_timestamp', 'total_parameters'
 ]
 FEATURE_COLUMNS = [
-    'conv_layers', 'cpu_usage_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
-    'memory_usage_percent',
-    #'network_type', # Include network_type for demonstration if it's in your data
-    'pool_layers',
-    'total_parameters'
+    'conv_layers','device_cpu_cores', 'device_load_percent', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_disk_usage_percent',
+    'filter_details', 'fully_conn_layers',
+    'device',
+    'pool_layers', 'total_parameters'
 ]
 NUMERICAL_FEATURES = [
-    'conv_layers', 'cpu_usage_percent', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
-    'memory_usage_percent', 'pool_layers', 'total_parameters'
+    'conv_layers', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
+    'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
+    'pool_layers', 'total_parameters'
 ]
 CATEGORICAL_FEATURES = [
     'device',
-    #'network_type' # Include network_type for demonstration if it's in your data
 ]
-
 
 # --- Functions ---
 
@@ -124,13 +121,17 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
     if 'device' in df.columns:
         df['device'] = df['device'].astype(str).str.lower()  # make lowercase and ensure string type
         df['device'] = df['device'].map({'raspberrypi': 0, 'jetson': 1}).fillna(-1)
+    if 'device_cpu_cores' in df.columns:
+        df['device_cpu_cores'] = df['device_cpu_cores'].replace(0, 4) # rpi 4B and jetson nano have 4 cores
+        df['device_load_percent'] = (df['device_cpu_cores'] * df['device_load_percent']) / 4
 
-    # Check for required columns
-    missing_essential_cols = [col for col in [target_col] + feature_cols if col not in df.columns]
-    if missing_essential_cols:
-        print(f"Error: The following essential columns are missing from your data: {missing_essential_cols}")
-        print("Available columns:", df.columns.tolist())
-        return None, None, None
+
+    if 'total_memory_usage_percent' in df.columns:
+        df = df.drop('total_memory_usage_percent', axis=1)
+    if 'total_cpu_usage_percent' in df.columns:
+        df = df.drop('total_cpu_usage_percent', axis=1)
+
+
 
     # --- Debugging: Inspect the target column BEFORE conversion (now with timedelta context) ---
     print(f"\n--- Debugging '{target_col}' column (BEFORE time parsing) ---")
@@ -393,35 +394,6 @@ def main():
     # This provides a more robust estimate of model performance
     # This method will train and run model 10 times and find the one with the best performance
     perform_cross_validation(X, y, preprocessor)
-
-
-    specific_model_features = pd.DataFrame([{
-        'conv_layers': 7,
-        'cpu_usage_percent': 45.2,
-        'device': 0, # 0 means that the device is a RPi
-        'disk_io_read_bytes': 15000,
-        'disk_io_write_bytes': 8000,
-        'disk_usage_percent': 55.0,
-        'fully_conn_layers': 3,
-        'memory_usage_percent': 70.0,
-        'pool_layers': 4,
-        'total_parameters': 25000000
-    }])
-
-    specific_model_features = specific_model_features[FEATURE_COLUMNS]
-
-    try:
-        loaded_for_prediction_pipeline = joblib.load(MODEL_PATH)
-        predicted_inference_time = loaded_for_prediction_pipeline.predict(specific_model_features)
-
-        print(f"\nFeatures for specific model:\n{specific_model_features}")
-        output = {"model": "ONNX-model", "predicted_inference_time_seconds": float(predicted_inference_time[0])}
-        print(f"Predicted inference time: {output}")
-    except FileNotFoundError:
-        print(f"Error: Model file '{MODEL_PATH}' not found. Cannot make specific prediction.")
-    except Exception as e:
-        print(f"Error making specific prediction: {e}")
-
     print("\n--- Script Execution Complete ---")
 
 if __name__ == "__main__":

@@ -22,132 +22,123 @@ CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
 TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
 
 ALL_CSV_COLUMNS = [
-    'conv_layers', 'total_cpu_usage_percent','device_cpu_cores', 'device_load_percent' 'device', 'device_disk_io_read_bytes',
-    'disk_io_write_bytes', 'disk_usage_percent', 'end_timestamp', 'execution_number',
+    'conv_layers', 'total_device_load_percent','device_cpu_cores', 'device_load_percent', 'device', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_device_disk_usage_percent', 'end_timestamp', 'execution_number',
     'execution_time', 'filter_details', 'fully_conn_layers', 'total_memory_usage_percent',
 
     'pool_layers', 'start_timestamp', 'total_parameters'
 ]
 FEATURE_COLUMNS = [
-    'conv_layers', 'device_load_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
-    'total_memory_usage_percent',
-
-    'pool_layers',
-    'total_parameters'
+    'conv_layers','device_cpu_cores', 'device_load_percent', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_device_disk_usage_percent',
+    'filter_details', 'fully_conn_layers',
+    'device',
+    'pool_layers', 'total_parameters'
 ]
 NUMERICAL_FEATURES = [
-    'conv_layers', 'cpu_usage_percent', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
-    'disk_io_write_bytes', 'disk_usage_percent', 'fully_conn_layers',
-    'memory_usage_percent', 'pool_layers', 'total_parameters'
+    'conv_layers', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
+    'disk_io_write_bytes', 'device_device_disk_usage_percent', 'fully_conn_layers',
+    'pool_layers', 'total_parameters'
 ]
 CATEGORICAL_FEATURES = [
     'device',
-    #'network_type' # Include network_type for demonstration if it's in your data
 ]
 
-def model_characteristics(model_name,device_type):
+
+def model_characteristics(model_name,device_type,device_cpu_usage):
     if model_name == "alexnet.onnx":
         characteristics = {
             'conv_layers': 5,
-            'cpu_usage_percent': 45.2,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_device_disk_usage_percent': 55.0,
             'fully_conn_layers': 3,
-            'memory_usage_percent': 70.0,
             'pool_layers': 3,
             'total_parameters': 60965228
         }
     elif model_name == "densenet.onnx":
         characteristics = {
-            'conv_layers': 121,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 120,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 5,
+            'pool_layers': 4,
             'total_parameters': 8146152
         }
     elif model_name == "efficientnet.onnx":
         characteristics = {
-            'conv_layers': 55,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 56,
+            'device_load_percent':  device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 1,
+            'pool_layers': 2,
             'total_parameters': 12966034
         }
-    elif model_name == "epos.onnx":
+    elif model_name == "deeplab.onnx":
         characteristics = {
-            'conv_layers': 149,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 105,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
-            'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 1,
+            'device_disk_usage_percent': 55.0,
+            'fully_conn_layers': 0,
+            'pool_layers': 2,
             'total_parameters': 41402464
         }
     elif model_name == "googlenet.onnx":
         characteristics = {
-            'conv_layers': 57,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 59,
+            'device_load_percent':  device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 14,
+            'pool_layers': 15,
             'total_parameters': 6998555
         }
     elif model_name == "mobilenet.onnx":
         characteristics = {
-            'conv_layers': 54,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 53,
+            'device_load_percent':  device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 1,
+            'pool_layers': 2,
             'total_parameters': 3539138
         }
     elif model_name == "resnet.onnx":
         characteristics = {
-            'conv_layers': 151,
-            'cpu_usage_percent': 45.2,
+            'conv_layers': 152,
+            'device_load_percent':  device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 1,
-            'memory_usage_percent': 70.0,
-            'pool_layers': 2,
+            'pool_layers': 1,
             'total_parameters': 60404072
         }
     elif model_name == "vgg.onnx":
         characteristics = {
             'conv_layers': 13,
-            'cpu_usage_percent': 45.2,
+            'device_load_percent':  device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 15000,
             'disk_io_write_bytes': 8000,
-            'disk_usage_percent': 55.0,
+            'device_disk_usage_percent': 55.0,
             'fully_conn_layers': 3,
-            'memory_usage_percent': 70.0,
             'pool_layers': 5,
             'total_parameters': 138357544
         }

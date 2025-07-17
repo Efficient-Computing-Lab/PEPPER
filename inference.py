@@ -159,7 +159,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["alexnet.onnx"]
+    given_model_names = ["vgg.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
@@ -197,13 +197,14 @@ def main():
                 output = {"device": given_device, "model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
                 print(output)
 
-                #select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
-                #print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
+
             except FileNotFoundError:
                 print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
             except Exception as e:
                 print(f"Error making specific prediction: {e}")
 
+        select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
+        print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
         print("\n--- Script Execution Complete ---")
 
 if __name__ == "__main__":

@@ -588,4 +588,4 @@ if __name__ == '__main__':
         stresser.end_stresser()
     #if model_name == "deeplab_part2.onnx":
 
-    save_output(model_name, device_type, complete_metrics_list)
+    #save_output(model_name, device_type, complete_metrics_list)

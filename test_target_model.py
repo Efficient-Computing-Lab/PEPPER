@@ -409,11 +409,13 @@ def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_li
         read_bytes, write_bytes = run_model(model_name,session,input_names,output_names,runs,image_path)
         end_timestamp = datetime.datetime.now()
         execution_time = count_execution_time(str(start_timestamp),str(end_timestamp))
-        tmp = metrics_list[runs - 1]
-        tmp["model_name"] = model_name
-        tmp["execution_time"] = execution_time
-        tmp["start_timestamp"] = str(start_timestamp)
-        tmp["end_timestamp"] = str(end_timestamp)
+        output ={"model_name": model_name,
+        "execution_time": execution_time,
+        "start_timestamp": start_timestamp,
+        "end_timestamp": end_timestamp }
+        print(output)
+        metrics_list.append(output)
+
 
 
 

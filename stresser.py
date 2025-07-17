@@ -45,7 +45,7 @@ def get_metrics(random_cpu_cores,random_cpu_load):
                 "device_cpu_cores": random_cpu_cores,
                 "device_load_percent": random_cpu_load,
             }
-
+    print(metrics)
 if __name__ == '__main__':
     random_cpu_load = random.randint(20, 80)
     random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0

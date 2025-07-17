@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.externals.array_api_compat import device
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
@@ -45,7 +46,7 @@ CATEGORICAL_FEATURES = [
 ]
 
 
-def model_characteristics(model_name,device_type,device_cpu_usage):
+def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     if model_name == "alexnet.onnx":
         characteristics = {
             'conv_layers': 5,
@@ -53,7 +54,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_device_disk_usage_percent': 55.0,
+            'device_device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 3,
             'pool_layers': 3,
             'total_parameters': 60965228
@@ -65,7 +66,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 1,
             'pool_layers': 4,
             'total_parameters': 8146152
@@ -77,7 +78,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 1,
             'pool_layers': 2,
             'total_parameters': 12966034
@@ -89,7 +90,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 456500,
             'disk_io_write_bytes': 98918400,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 0,
             'pool_layers': 2,
             'total_parameters': 41402464
@@ -101,7 +102,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 1,
             'pool_layers': 15,
             'total_parameters': 6998555
@@ -113,7 +114,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 1,
             'pool_layers': 2,
             'total_parameters': 3539138
@@ -125,7 +126,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 1,
             'pool_layers': 1,
             'total_parameters': 60404072
@@ -137,7 +138,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_disk_usage_percent': 55.0,
+            'device_disk_usage_percent': disk_usage,
             'fully_conn_layers': 3,
             'pool_layers': 5,
             'total_parameters': 138357544
@@ -150,15 +151,27 @@ def model_characteristics(model_name,device_type,device_cpu_usage):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["alexnet.onnx","densenet.onnx","efficientnet.onnx", "epos.onnx", "googlenet.onnx", "mobilenet.onnx","resnet.onnx","vgg.onnx"]
+    given_model_names = ["alexnet.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
+    device_types =[0,1]
     for given_model_name in given_model_names:
-        rpi_characteristics = model_characteristics(given_model_name,0)
-        jetson_characteristics = model_characteristics(given_model_name, 1)
-        characteristics_list.append(rpi_characteristics)
-        characteristics_list.append(jetson_characteristics)
+        for device_type in device_types:
+            if device_type == 0:
+                print("RaspberryPi 4B")
+            if device_type == 1:
+                print("Jetson Nano")
+            cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
+            device_cpu_usage = float(cpu_usage_input)
+            disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()
+            disk_usage = float(disk_usage_input)
+            input_characteristics={}
+            if device_type == 0:
+                input_characteristics = model_characteristics(given_model_name,0,device_cpu_usage,disk_usage)
+            if device_type == 1:
+                input_characteristics = model_characteristics(given_model_name, 1,device_cpu_usage,disk_usage)
+            characteristics_list.append(input_characteristics)
 
         for characteristics_entry in characteristics_list:
             specific_model_features = pd.DataFrame([characteristics_entry])
@@ -174,15 +187,15 @@ def main():
                 if characteristics_entry.get("device") == 1:
                     given_device = "Jetson Nano"
                 output = {"device": given_device, "model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
-                print(f"Predicted inference time: {output}")
+                print(output)
 
-                select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
-                print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
+                #select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
+                #print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
             except FileNotFoundError:
                 print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
             except Exception as e:
                 print(f"Error making specific prediction: {e}")
-        characteristics_list.clear()
+
         print("\n--- Script Execution Complete ---")
 
 if __name__ == "__main__":

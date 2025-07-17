@@ -317,10 +317,10 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
         read_bytes = os.path.getsize(image_path)
         #disk_io_before = psutil.disk_io_counters()
         if model_name != "efficientnet.onnx" and model_name!="efficientnet_part1.onnx":
-            print(model_name)
+            #print(model_name)
             img = preprocess_image(image_path)
             result = session.run(output_name, {input_name: img})
-            print(len(result))
+            #print(len(result))
             #googlenet result =1
             #mobilenet result =1
             #densenet result =1
@@ -340,7 +340,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
             # create a batch of 1 (that batch size is buned into the saved_model)
             img_batch = np.expand_dims(img, axis=0)
             result = session.run(output_name, {input_name: img_batch})[0]
-            print(len(result))
+            #print(len(result))
             read_bytes = os.path.getsize(image_path)
             if model_name =="efficientnet.onnx":
                 os.makedirs("results", exist_ok=True)
@@ -391,9 +391,9 @@ def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_li
         if gpu_needed == False or device_type=="raspberrypi":
             providers =[ "CPUExecutionProvider"]
         input_names = [inp.name for inp in model.graph.input]
-        print(input_names)  # List of input names
+        #print(input_names)  # List of input names
         output_names = [inp.name for inp in model.graph.output]
-        print(output_names)
+        #print(output_names)
         # Count the number of parameters
         #total_parameters = count_parameters(model)
 

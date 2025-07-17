@@ -159,7 +159,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["vgg.onnx"]
+    given_model_names = ["resnet.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano

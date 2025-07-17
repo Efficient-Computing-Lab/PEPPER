@@ -2,6 +2,8 @@ import os
 import signal
 import subprocess
 import random
+import time
+
 import psutil
 
 PID_FILE = "stresser_pid.txt"
@@ -48,5 +50,6 @@ def get_metrics(random_cpu_cores,random_cpu_load):
     print(metrics)
 if __name__ == '__main__':
     random_cpu_load = random.randint(20, 80)
-    random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
+    random_cpu_cores = random.randint(1, 4)# Use 1–4 to avoid cpu=0
+    time.sleep(15)
     process = start_stresser(random_cpu_cores, random_cpu_load)

@@ -49,14 +49,14 @@ ALL_CSV_COLUMNS = [
     'pool_layers', 'start_timestamp', 'total_parameters'
 ]
 FEATURE_COLUMNS = [
-    'conv_layers','device_cpu_cores', 'device_load_percent', 'disk_io_read_bytes',
+    'conv_layers', 'device_load_percent', 'disk_io_read_bytes',
     'disk_io_write_bytes', 'device_disk_usage_percent',
     'filter_details', 'fully_conn_layers',
     'device',
     'pool_layers', 'total_parameters'
 ]
 NUMERICAL_FEATURES = [
-    'conv_layers', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
+    'conv_layers', 'disk_io_read_bytes', 'device_load_percent',
     'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
     'pool_layers', 'total_parameters'
 ]
@@ -124,7 +124,7 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
     if 'device_cpu_cores' in df.columns:
         df['device_cpu_cores'] = df['device_cpu_cores'].replace(0, 4) # rpi 4B and jetson nano have 4 cores
         df['device_load_percent'] = (df['device_cpu_cores'] * df['device_load_percent']) / 4
-
+        df = df.drop('device_cpu_cores', axis=1)
 
     if 'total_memory_usage_percent' in df.columns:
         df = df.drop('total_memory_usage_percent', axis=1)

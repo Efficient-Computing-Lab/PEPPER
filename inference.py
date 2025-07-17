@@ -24,21 +24,21 @@ TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
 
 ALL_CSV_COLUMNS = [
     'conv_layers', 'total_device_load_percent','device_cpu_cores', 'device_load_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'device_device_disk_usage_percent', 'end_timestamp', 'execution_number',
+    'disk_io_write_bytes', 'device_disk_usage_percent', 'end_timestamp', 'execution_number',
     'execution_time', 'filter_details', 'fully_conn_layers', 'total_memory_usage_percent',
 
     'pool_layers', 'start_timestamp', 'total_parameters'
 ]
 FEATURE_COLUMNS = [
-    'conv_layers','device_cpu_cores', 'device_load_percent', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'device_device_disk_usage_percent',
+    'conv_layers', 'device_load_percent', 'disk_io_read_bytes',
+    'disk_io_write_bytes', 'device_disk_usage_percent',
     'filter_details', 'fully_conn_layers',
     'device',
     'pool_layers', 'total_parameters'
 ]
 NUMERICAL_FEATURES = [
     'conv_layers', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
-    'disk_io_write_bytes', 'device_device_disk_usage_percent', 'fully_conn_layers',
+    'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
     'pool_layers', 'total_parameters'
 ]
 CATEGORICAL_FEATURES = [
@@ -54,7 +54,8 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
-            'device_device_disk_usage_percent': disk_usage,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 1376,
             'fully_conn_layers': 3,
             'pool_layers': 3,
             'total_parameters': 60965228
@@ -67,6 +68,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 11240,
             'fully_conn_layers': 1,
             'pool_layers': 4,
             'total_parameters': 8146152
@@ -79,6 +81,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 56184,
             'fully_conn_layers': 1,
             'pool_layers': 2,
             'total_parameters': 12966034
@@ -91,6 +94,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 456500,
             'disk_io_write_bytes': 98918400,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 102686,
             'fully_conn_layers': 0,
             'pool_layers': 2,
             'total_parameters': 41402464
@@ -103,6 +107,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 7280,
             'fully_conn_layers': 1,
             'pool_layers': 15,
             'total_parameters': 6998555
@@ -115,6 +120,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 18088,
             'fully_conn_layers': 1,
             'pool_layers': 2,
             'total_parameters': 3539138
@@ -127,6 +133,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 75712,
             'fully_conn_layers': 1,
             'pool_layers': 1,
             'total_parameters': 60404072
@@ -139,6 +146,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
+            'filter_details': 4224,
             'fully_conn_layers': 3,
             'pool_layers': 5,
             'total_parameters': 138357544

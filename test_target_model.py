@@ -567,6 +567,8 @@ if __name__ == '__main__':
         random_cpu_load = random.randint(20, 80)
         random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
         stresser.start_stresser(random_cpu_cores, random_cpu_load)
+        time.sleep(15)
+        stresser.get_metrics(random_cpu_cores, random_cpu_load)
         if image:
             load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list,image)
         else:

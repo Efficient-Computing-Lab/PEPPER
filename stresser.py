@@ -16,8 +16,6 @@ def start_stresser(random_cores, random_load):
     with open(PID_FILE, 'w') as f:
         f.write(str(process.pid))
 
-    return process
-
 def end_stresser():
     if os.path.exists(PID_FILE):
         with open(PID_FILE, 'r') as f:
@@ -51,6 +49,6 @@ def get_metrics(random_cpu_cores,random_cpu_load):
 if __name__ == '__main__':
     random_cpu_load = random.randint(20, 80)
     random_cpu_cores = random.randint(1, 4)# Use 1–4 to avoid cpu=0
-    process = start_stresser(random_cpu_cores, random_cpu_load)
+    start_stresser(random_cpu_cores, random_cpu_load)
     time.sleep(15)
     get_metrics(random_cpu_cores,random_cpu_load)

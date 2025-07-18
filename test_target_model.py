@@ -51,18 +51,7 @@ def read_distributed_results(model_name):
     delete_npy_file(path)
     return input_data, read_bytes
 
-def end_stresser(process):
-    pgid = os.getpgid(process.pid)
-    os.killpg(pgid, signal.SIGTERM)
-    return process
 
-
-
-def start_stresser(random_cores,random_load):
-    command = f"stress-ng --cpu {random_cores} --cpu-load {random_load}"
-    process = subprocess.Popen(command,shell=True,start_new_session=True)
-
-    return process
 
 def count_parameters(graph):
     total_params = 0
@@ -581,6 +570,9 @@ if __name__ == '__main__':
         print(f"Profiling {model_name}")
         print(f"Iteration: {runs}")
         print('-' * 50)
+        random_cpu_load = random.randint(20, 80)
+        random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
+        stresser.start_stresser(random_cpu_cores, random_cpu_load)
         if image_path:
             load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list,string_paths[iteration])
         else:

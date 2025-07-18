@@ -121,9 +121,11 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
     if 'device' in df.columns:
         df['device'] = df['device'].astype(str).str.lower()  # make lowercase and ensure string type
         df['device'] = df['device'].map({'raspberrypi': 0, 'jetson': 1}).fillna(-1)
+        df = df[df['device'] != 'jetson']
     if 'device_cpu_cores' in df.columns:
         df['device_cpu_cores'] = df['device_cpu_cores'].replace(0, 4) # rpi 4B and jetson nano have 4 cores
         df['device_load_percent'] = (df['device_cpu_cores'] * df['device_load_percent']) / 4
+        df = df[(df['device_load_percent'] < 35) | (df['device_load_percent'] > 65)]
         df = df.drop('device_cpu_cores', axis=1)
 
     if 'total_memory_usage_percent' in df.columns:
@@ -214,7 +216,7 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
 
     preprocessor = ColumnTransformer(
         transformers=[
-            ('num', MinMaxScaler(), numerical_cols),
+            #('num', MinMaxScaler(), numerical_cols),
             ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols)
         ],
         remainder='passthrough'
@@ -231,7 +233,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
         ('regressor', XGBRegressor(objective='reg:squarederror', n_estimators=100,
-                                   learning_rate=0.1, max_depth=3, random_state=42))
+                                   learning_rate=0.05, max_depth=8, random_state=42))
     ])
 
     kf = KFold(n_splits=10, shuffle=True, random_state=42)

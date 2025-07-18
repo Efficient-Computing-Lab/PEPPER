@@ -9,6 +9,7 @@ from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from sklearn.linear_model import LinearRegression
 import sys
 import joblib # Import joblib for saving/loading models
 from xgboost import XGBRegressor # Import XGBoost Regressor
@@ -159,17 +160,22 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["resnet.onnx"]
+    given_model_names = ["efficientnet.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
-    device_types =[0,1]
+    device_types =[0,0]
+    count_device = 0
     for given_model_name in given_model_names:
         for device_type in device_types:
             if device_type == 0:
-                print("RaspberryPi 4B")
-            if device_type == 1:
-                print("Jetson Nano")
+                if count_device == 0:
+                    string_ending= "master"
+                if count_device ==1:
+                    string_ending= "worker"
+                print("RaspberryPi 4B " + string_ending)
+            #if device_type == 1:
+            #    print("Jetson Nano")
             cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
             device_cpu_usage = float(cpu_usage_input)
             disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()
@@ -180,7 +186,7 @@ def main():
             if device_type == 1:
                 input_characteristics = model_characteristics(given_model_name, 1,device_cpu_usage,disk_usage)
             characteristics_list.append(input_characteristics)
-
+            count_device = count_device +1
         for characteristics_entry in characteristics_list:
             specific_model_features = pd.DataFrame([characteristics_entry])
 
@@ -203,7 +209,7 @@ def main():
             except Exception as e:
                 print(f"Error making specific prediction: {e}")
 
-        select_random_device = random.choice(["Raspberrypi 4B", "Jetson Nano"])
+        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker"])
         print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
         print("\n--- Script Execution Complete ---")
 

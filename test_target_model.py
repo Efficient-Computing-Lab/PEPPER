@@ -549,14 +549,8 @@ if __name__ == '__main__':
     if device_type not in devices:
         print("device_type should be either raspberrypi, jetson or desktop")
         sys.exit(1)
-    images = args.image_path
-    if images:
-        image_path = Path(args.image_path)
-        image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.gif', '.tiff'}
-        all_images = [p for p in image_path.rglob('*') if p.is_file() and p.suffix.lower() in image_extensions]
-        string_paths = [str(p) for p in all_images]
-    else:
-        image_path = None
+    image = args.image_path
+
 
     model_name = show_menu()
     complete_metrics_list = []
@@ -573,8 +567,8 @@ if __name__ == '__main__':
         random_cpu_load = random.randint(20, 80)
         random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
         stresser.start_stresser(random_cpu_cores, random_cpu_load)
-        if image_path:
-            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list,string_paths[iteration])
+        if image:
+            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list,image)
         else:
             load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list)
         stresser.end_stresser()

@@ -164,7 +164,7 @@ def main():
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
-    device_types =[0,0]
+    device_types =[0,0,1]
     count_device = 0
     for given_model_name in given_model_names:
         for device_type in device_types:
@@ -174,8 +174,8 @@ def main():
                 if count_device ==1:
                     string_ending= "worker"
                 print("RaspberryPi 4B " + string_ending)
-            #if device_type == 1:
-            #    print("Jetson Nano")
+            if device_type == 1:
+                print("Jetson Nano")
             cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
             device_cpu_usage = float(cpu_usage_input)
             disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()

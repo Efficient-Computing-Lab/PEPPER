@@ -24,7 +24,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, RobustScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
@@ -216,7 +216,7 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
 
     preprocessor = ColumnTransformer(
         transformers=[
-            #('num', MinMaxScaler(), numerical_cols),
+            ('num', RobustScaler(), numerical_cols),
             ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols)
         ],
         remainder='passthrough'
@@ -233,7 +233,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
         ('regressor', XGBRegressor(objective='reg:squarederror', n_estimators=100,
-                                   learning_rate=0.05, max_depth=8, random_state=42))
+                                   learning_rate=0.1, max_depth=6, random_state=42))
     ])
 
     kf = KFold(n_splits=10, shuffle=True, random_state=42)

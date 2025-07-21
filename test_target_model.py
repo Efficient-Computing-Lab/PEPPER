@@ -280,7 +280,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
         img = cv2.imread(image_path)
         input_data = np.array(img).astype(np.float32)
         #input = input_name[0]
-        dict_input = load_tensors(input_name[0],input_data)
+        dict_input = load_tensors(input_name,input_data)
         result = session.run(output_name,dict_input)
         if model_name == "deeplab_part1.onnx":
             write_bytes =write_distributed_results(model_name,result)

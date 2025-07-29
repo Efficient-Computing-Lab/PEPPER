@@ -557,7 +557,6 @@ if __name__ == '__main__':
     gpu_needed = args.gpu_needed
     # Prompt the user for model paths before starting the profiling loop
     model_path = prompt_model_path(model_name)
-    print(type(model_path))
     for iteration in range(args.iterations):
 
         runs = iteration + 1
@@ -576,4 +575,4 @@ if __name__ == '__main__':
         stresser.end_stresser()
     #if model_name == "deeplab_part2.onnx":
 
-    #save_output(model_name, device_type, complete_metrics_list)
+    save_output(model_name, device_type, complete_metrics_list)

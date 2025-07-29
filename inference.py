@@ -160,7 +160,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
 def main():
 
     model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["efficientnet.onnx"]
+    given_model_names = ["deeplab.onnx"]
     characteristics_list = []
     # device_type 0 = RaspberryPi 4B
     # device_type 1 = Jetson Nano
@@ -209,7 +209,7 @@ def main():
             except Exception as e:
                 print(f"Error making specific prediction: {e}")
 
-        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker"])
+        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker", "Jetson nano"])
         print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
         print("\n--- Script Execution Complete ---")
 

@@ -226,6 +226,66 @@ def preprocess_data(df: pd.DataFrame, target_col: str,
     return X, y, preprocessor
 
 
+def plot_feature_importance(model_pipeline, output_path='feature_importance.pdf'):
+    """
+    Plots and saves the feature importance from the XGBoost model, using proper feature names.
+
+    Parameters:
+    - model_pipeline: The trained Pipeline object (includes preprocessing and XGBoost model).
+    - output_path: Path to save the plot.
+    """
+    print("\n--- Generating Feature Importance Plot ---")
+
+    # Step 1: Extract feature names after preprocessing
+    def get_feature_names_from_pipeline(pipeline):
+        preprocessor = pipeline.named_steps['preprocessor']
+        feature_names = []
+
+        for name, transformer, columns in preprocessor.transformers_:
+            if transformer == 'drop':
+                continue
+            if transformer == 'passthrough':
+                feature_names.extend(columns)
+            elif hasattr(transformer, 'get_feature_names_out'):
+                encoded_names = transformer.get_feature_names_out(columns)
+                feature_names.extend(encoded_names)
+            else:
+                feature_names.extend(columns)
+
+        return feature_names
+
+    all_feature_names = get_feature_names_from_pipeline(model_pipeline)
+
+    # Step 2: Extract booster and raw feature importance
+    booster = model_pipeline.named_steps['regressor'].get_booster()
+    score_dict = booster.get_score(importance_type='weight')  # keys are like 'f0', 'f1', etc.
+
+    # Step 3: Map 'f0', 'f1', ... to actual feature names
+    importance_data = []
+    for key, value in score_dict.items():
+        index = int(key[1:])  # strip 'f' prefix
+        if index < len(all_feature_names):
+            name = all_feature_names[index]
+        else:
+            name = f'Unknown_{index}'
+        importance_data.append((name, value))
+
+    importance_df = pd.DataFrame(importance_data, columns=["Feature", "Importance"])
+    importance_df = importance_df.sort_values(by="Importance", ascending=False)
+
+    # Step 4: Plot
+    plt.figure(figsize=(30, 20))
+    sns.barplot(x="Importance", y="Feature", data=importance_df, palette="viridis")
+    plt.title("Feature Importance (XGBoost)", fontsize=40, fontweight="bold")
+    plt.xlabel("Importance Score", fontsize=35, fontweight="bold")
+    plt.ylabel("Feature", fontsize=35, fontweight="bold")
+    plt.xticks(fontsize=30)
+    plt.yticks(fontsize=30)
+    plt.tight_layout()
+    plt.savefig(output_path)
+    print(f"✅ Saved: {output_path}")
+    plt.close()
+
 
 def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: ColumnTransformer, save_path=MODEL_PATH):
     print("\n--- Performing 10-Fold Cross-Validation ---")
@@ -367,6 +427,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     if best_model:
         joblib.dump(best_model, save_path)
         print(f"✅ Best model saved to {save_path}")
+        plot_feature_importance(best_model, output_path='feature_importance.pdf')
 
     return best_model
 

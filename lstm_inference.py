@@ -132,31 +132,30 @@ def main():
 
     given_model_names = ["efficientnet.onnx"]
     characteristics_list = []
-    device_types =[0, 0]
+    device_types =[0, 0,1]
     count_device = 0
 
     for given_model_name in given_model_names:
         for device_type in device_types:
             if device_type == 0:
                 if count_device == 0:
-                    string_ending= "master"
-                elif count_device ==1:
-                    string_ending= "worker"
-                print(f"\n--- Predicting for RaspberryPi 4B {string_ending} ---")
-
-            try:
-                cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
-                device_cpu_usage = float(cpu_usage_input)
-                disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()
-                disk_usage = float(disk_usage_input)
-            except ValueError:
-                print("Invalid input. Please enter a numerical value for CPU/Disk usage.")
-                continue
-
-            input_characteristics = model_characteristics(given_model_name, device_type, device_cpu_usage, disk_usage)
+                    string_ending = "master"
+                if count_device == 1:
+                    string_ending = "worker"
+                print("RaspberryPi 4B " + string_ending)
+            if device_type == 1:
+                print("Jetson Nano")
+            cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
+            device_cpu_usage = float(cpu_usage_input)
+            disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()
+            disk_usage = float(disk_usage_input)
+            input_characteristics = {}
+            if device_type == 0:
+                input_characteristics = model_characteristics(given_model_name, 0, device_cpu_usage, disk_usage)
+            if device_type == 1:
+                input_characteristics = model_characteristics(given_model_name, 1, device_cpu_usage, disk_usage)
             characteristics_list.append(input_characteristics)
-            count_device += 1
-
+            count_device = count_device +1
         for characteristics_entry in characteristics_list:
             specific_model_features = pd.DataFrame([characteristics_entry], columns=FEATURE_COLUMNS)
 
@@ -189,7 +188,7 @@ def main():
             except Exception as e:
                 print(f"Error making specific prediction with LSTM: {e}")
 
-        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker"])
+        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker", "Jetson nano"])
         print(f"\nRandom Selection: The {given_model_name} should be executed on {select_random_device}")
         print("\n--- Script Execution Complete ---")
 

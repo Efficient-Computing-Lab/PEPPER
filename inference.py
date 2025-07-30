@@ -157,61 +157,113 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
         sys.exit(0)
     return characteristics
 # --- Main Execution Flow ---
+
+def load_device_data(csv_path, device_type, device_label):
+    try:
+        df = pd.read_csv(csv_path)
+        df["device_type"] = device_type
+        df["device_label"] = device_label
+        return df
+    except FileNotFoundError:
+        print(f"CSV file '{csv_path}' not found.")
+        return pd.DataFrame()  # Empty dataframe
+
 def main():
+    model_path = 'best_trained_xgboost_model.joblib'
 
-    model_path = 'best_trained_xgboost_model.joblib'  # Path to save/load the trained model
-    given_model_names = ["deeplab.onnx"]
-    characteristics_list = []
-    # device_type 0 = RaspberryPi 4B
-    # device_type 1 = Jetson Nano
-    device_types =[0,0,1]
-    count_device = 0
-    for given_model_name in given_model_names:
-        for device_type in device_types:
-            if device_type == 0:
-                if count_device == 0:
-                    string_ending= "master"
-                if count_device ==1:
-                    string_ending= "worker"
-                print("RaspberryPi 4B " + string_ending)
-            if device_type == 1:
-                print("Jetson Nano")
-            cpu_usage_input = input("Enter CPU usage percentage (e.g., 55.0): ").strip()
-            device_cpu_usage = float(cpu_usage_input)
-            disk_usage_input = input("Enter Disk usage percentage (e.g., 70.0): ").strip()
-            disk_usage = float(disk_usage_input)
-            input_characteristics={}
-            if device_type == 0:
-                input_characteristics = model_characteristics(given_model_name,0,device_cpu_usage,disk_usage)
-            if device_type == 1:
-                input_characteristics = model_characteristics(given_model_name, 1,device_cpu_usage,disk_usage)
-            characteristics_list.append(input_characteristics)
-            count_device = count_device +1
-        for characteristics_entry in characteristics_list:
-            specific_model_features = pd.DataFrame([characteristics_entry])
+    model_names = [
+        "deeplab.onnx"]
 
-            specific_model_features = specific_model_features[FEATURE_COLUMNS]
+    device_csvs = [
+        ("raspberrypi_master.csv", 0, "RaspberryPi 4B master"),
+        ("raspberrypi_worker.csv", 0, "RaspberryPi 4B worker"),
+        ("jetson_nano.csv", 1, "Jetson Nano"),
+    ]
 
+    try:
+        loaded_model = joblib.load(model_path)
+    except FileNotFoundError:
+        print(f"Error: Model file '{model_path}' not found.")
+        sys.exit(1)
+
+    output_results = []
+
+    for model_name in model_names:
+        print(f"\n--- Processing model: {model_name} ---")
+        characteristics_list = []
+
+        # Collect data for this model from all devices
+        for csv_file, device_type, device_label in device_csvs:
             try:
-                loaded_for_prediction_pipeline = joblib.load(model_path)
-                predicted_inference_time = loaded_for_prediction_pipeline.predict(specific_model_features)
-
-                if characteristics_entry.get("device") == 0:
-                    given_device = "RaspberryPi 4B"
-                if characteristics_entry.get("device") == 1:
-                    given_device = "Jetson Nano"
-                output = {"device": given_device, "model": given_model_name, "predicted_inference_time_seconds": float(predicted_inference_time[0])}
-                print(output)
-
-
+                df = pd.read_csv(csv_file)
             except FileNotFoundError:
-                print(f"Error: Model file '{model_path}' not found. Cannot make specific prediction.")
-            except Exception as e:
-                print(f"Error making specific prediction: {e}")
+                print(f"Error: CSV file '{csv_file}' not found.")
+                continue
 
-        select_random_device = random.choice(["Raspberrypi 4B master", "Raspberrypi 4B worker", "Jetson nano"])
-        print(f"Random Selection: The {given_model_name} should be executed on {select_random_device}")
-        print("\n--- Script Execution Complete ---")
+            for _, row in df.iterrows():
+                cpu_usage = float(row["cpu_usage"])
+                disk_usage = float(row["disk_usage"])
+                exec_time = float(row["execution_time"])
+
+                characteristics = model_characteristics(
+                    model_name, device_type, cpu_usage, disk_usage
+                )
+
+                characteristics_list.append((characteristics, device_label, exec_time))
+
+        # Random device selection
+        select_random_device = random.choice([label for _, _, label in device_csvs])
+        print(f"🎲 Random suggestion for {model_name}: {select_random_device}")
+
+        model_predictions = []
+
+        for characteristics, label, exec_time in characteristics_list:
+            try:
+                features_df = pd.DataFrame([characteristics])[FEATURE_COLUMNS]
+                prediction = loaded_model.predict(features_df)
+
+                result = {
+                    "model": model_name,
+                    "device": label,
+                    "cpu_usage": characteristics["device_load_percent"],
+                    "disk_usage": characteristics["device_disk_usage_percent"],
+                    "actual_execution_time_seconds": exec_time,
+                    "predicted_inference_time_seconds": float(prediction[0]),
+                    "random_selection_device": select_random_device
+                }
+
+                model_predictions.append(result)
+
+            except Exception as e:
+                print(f"Error during prediction for {label}: {e}")
+
+        # Determine fastest actual device
+        if model_predictions:
+            fastest_actual_entry = min(model_predictions, key=lambda x: x["actual_execution_time_seconds"])
+            fastest_predicted_entry = min(model_predictions, key=lambda x: x["predicted_inference_time_seconds"])
+
+            fastest_actual_device = fastest_actual_entry["device"]
+            fastest_predicted_device = fastest_predicted_entry["device"]
+
+            for entry in model_predictions:
+                entry["fastest_device_by_execution_time"] = fastest_actual_device
+                entry["fastest_device_by_prediction"] = fastest_predicted_device
+                entry["random_was_fastest"] = (entry["random_selection_device"] == fastest_actual_device)
+                entry["prediction_was_correct"] = (fastest_predicted_device == fastest_actual_device)
+                output_results.append(entry)
+
+            print(f"⚡ Fastest actual device for {model_name}: {fastest_actual_device} ({fastest_actual_entry['actual_execution_time_seconds']:.4f}s)")
+            print(f"🧠 Fastest predicted device: {fastest_predicted_device} ({fastest_predicted_entry['predicted_inference_time_seconds']:.4f}s)")
+            print(f"✅ Random was fastest: {select_random_device == fastest_actual_device}")
+            print(f"✅ Prediction was correct: {fastest_predicted_device == fastest_actual_device}")
+
+        print("--- Done ---")
+
+    # Save output to CSV
+    output_df = pd.DataFrame(output_results)
+    output_df.to_csv("model_inference_predictions.csv", index=False)
+    print("\n✅ All results saved to 'model_inference_predictions.csv'")
+
 
 if __name__ == "__main__":
     main()

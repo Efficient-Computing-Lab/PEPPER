@@ -299,7 +299,8 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
     if (model_name == "alexnet.onnx" or model_name == "resnet.onnx" or model_name == "vgg.onnx" or model_name == "googlenet.onnx"\
             or model_name == "densenet.onnx" or model_name == "mobilenet.onnx" or model_name == "efficientnet.onnx" or model_name == "alexnet_part1.onnx"\
             or model_name == "resnet_part1.onnx" or model_name == "vgg_part1.onnx" or model_name == "googlenet_part1.onnx"\
-            or model_name == "densenet_part1.onnx" or model_name == "mobilenet_part1.onnx" or model_name == "efficientnet_part1.onnx"):
+            or model_name == "densenet_part1.onnx" or model_name == "mobilenet_part1.onnx" or model_name == "efficientnet_part1.onnx"
+            or model_name == "regnet.onnx" or model_name =="convnext.onnx"):
         with open("labels/synset.txt", "r") as f:
             labels = [l.strip() for l in f]
         input_name = session.get_inputs()[0].name
@@ -436,9 +437,11 @@ def show_menu():
             print("8. DeepLab")
             print("9. DeepLab part 1")
             print("10. DeepLab part 2")
-            print("11. EXIT")
+            print("11 Regnet")
+            print("12 ConvNext")
+            print("13. EXIT")
 
-            choice = input("Enter your choice (1–11): ")
+            choice = input("Enter your choice (1–13): ")
 
             main_models = {
                 '1': "vgg.onnx",
@@ -450,12 +453,14 @@ def show_menu():
                 '7': "alexnet.onnx",
                 '8': "deeplab.onnx",
                 '9': "deeplab_part1.onnx",
-                '10': "deeplab_part2.onnx"
+                '10': "deeplab_part2.onnx",
+                '11': "regnet.onnx",
+                '12': "convnext.onnx"
             }
 
             if choice in main_models:
                 return main_models[choice]
-            elif choice == '11':
+            elif choice == '13':
                 print("Exiting the menu.")
                 break
             else:

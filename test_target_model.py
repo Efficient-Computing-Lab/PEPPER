@@ -274,19 +274,26 @@ def count_execution_time(start_time,end_time):
 def run_model(model_name,session,input_name,output_name,runs,image_path=None):
     read_bytes = 0
     write_bytes = 0
-    if model_name == "deeplab_part1.onnx" or model_name == "deeplab.onnx":
+    if model_name == "deeplab_part1.onnx" or model_name == "deeplab.onnx" or model_name =="nasnet.onnx":
     #if len(input_name) == 1 and len(output_name) >=
         #disk_io_before = psutil.disk_io_counters
         img = cv2.imread(image_path)
         input_data = np.array(img).astype(np.float32)
         #input = input_name[0]
-        dict_input = load_tensors(input_name,input_data)
-        result = session.run(output_name,dict_input)
+        if model_name != "nasnet.onnx":
+            dict_input = load_tensors(input_name, input_data)
+            result = session.run(output_name, dict_input)
+        if model_name == "nasnet.onnx":
+            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            img_float = img_rgb.astype(np.float32)
+            img_preprocessed = (img_float / 127.5) - 1.0  # Same as nasnet_preprocess_input
+            img_array = np.expand_dims(img_preprocessed, axis=0)
+            result = session.run(None, {input_name[0]: img_array.astype(np.float32)})[0]
         if model_name == "deeplab_part1.onnx":
             write_bytes =write_distributed_results(model_name,result)
         #disk_io_after = psutil.disk_io_counters()
         read_bytes = os.path.getsize(image_path)
-        if model_name == "deeplab.onnx":
+        if model_name == "deeplab.onnx" or model_name =="nasnet.onnx":
             write_bytes = sum(record.nbytes for record in result)
     if model_name == "deeplab_part2.onnx":
     #elif len(input_name) >1 and len(output_name)>=1:
@@ -439,9 +446,10 @@ def show_menu():
             print("10. DeepLab part 2")
             print("11 Regnet")
             print("12 ConvNext")
-            print("13. EXIT")
+            print("13 Nasnet")
+            print("14. EXIT")
 
-            choice = input("Enter your choice (1–13): ")
+            choice = input("Enter your choice (1–14): ")
 
             main_models = {
                 '1': "vgg.onnx",
@@ -455,12 +463,13 @@ def show_menu():
                 '9': "deeplab_part1.onnx",
                 '10': "deeplab_part2.onnx",
                 '11': "regnet.onnx",
-                '12': "convnext.onnx"
+                '12': "convnext.onnx",
+                '13': "nasnet.onnx"
             }
 
             if choice in main_models:
                 return main_models[choice]
-            elif choice == '13':
+            elif choice == '14':
                 print("Exiting the menu.")
                 break
             else:

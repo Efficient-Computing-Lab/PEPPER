@@ -89,16 +89,42 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
         }
     elif model_name == "deeplab.onnx":
         characteristics = {
-            'conv_layers': 105,
+            'conv_layers': 149,
             'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 456500,
             'disk_io_write_bytes': 98918400,
             'device_disk_usage_percent': disk_usage,
             'filter_details': 102686,
-            'fully_conn_layers': 0,
-            'pool_layers': 2,
+            'fully_conn_layers': 1,
+            'pool_layers': 1,
             'total_parameters': 41402464
+        }
+    elif model_name == "deeplab_part1.onnx":
+        characteristics = {
+            'conv_layers': 143,
+            'device_load_percent': device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 456500,
+            'disk_io_write_bytes': 23347328,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 100632,
+            'fully_conn_layers': 1,
+            'pool_layers': 1,
+            'total_parameters': 40925519
+        }
+    elif model_name == "deeplab_part2.onnx":
+        characteristics = {
+            'conv_layers': 6,
+            'device_load_percent': device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 23347328,
+            'disk_io_write_bytes': 98918400,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 2054,
+            'fully_conn_layers': 0,
+            'pool_layers': 0,
+            'total_parameters': 476949
         }
     elif model_name == "googlenet.onnx":
         characteristics = {
@@ -152,6 +178,45 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'pool_layers': 5,
             'total_parameters': 138357544
         }
+    elif model_name == "regnet.onnx":
+        characteristics = {
+            'conv_layers': 74,
+            'device_load_percent':  device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 137749,
+            'disk_io_write_bytes': 4128,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 81008,
+            'fully_conn_layers': 1,
+            'pool_layers': 1,
+            'total_parameters': 107730552
+        }
+    elif model_name == "nasnet.onnx":
+        characteristics = {
+            'conv_layers': 488,
+            'device_load_percent': device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 137749,
+            'disk_io_write_bytes': 4000,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 180396,
+            'fully_conn_layers': 1,
+            'pool_layers': 57,
+            'total_parameters': 88655162
+        }
+    elif model_name == "convnext.onnx":
+        characteristics = {
+            'conv_layers': 40,
+            'device_load_percent': device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 137749,
+            'disk_io_write_bytes': 4128,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 19968,
+            'fully_conn_layers': 73,
+            'pool_layers': 1,
+            'total_parameters': 88591464
+        }
     else:
         print("You provided a wrong model")
         sys.exit(0)
@@ -175,9 +240,9 @@ def main():
         "deeplab.onnx"]
 
     device_csvs = [
-        ("raspberrypi_master.csv", 0, "RaspberryPi 4B master"),
-        ("raspberrypi_worker.csv", 0, "RaspberryPi 4B worker"),
-        ("jetson_nano.csv", 1, "Jetson Nano"),
+        ("/home/gkorod/evaluation/inference-deeplab-raspberrypi.csv", 0, "RaspberryPi 4B master"),
+        ("/home/gkorod/evaluation/inference-deeplab-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
+        ("/home/gkorod/evaluation/inference-deeplab-jetson.csv", 1, "Jetson Nano"),
     ]
 
     try:

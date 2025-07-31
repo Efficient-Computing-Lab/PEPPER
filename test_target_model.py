@@ -216,7 +216,7 @@ def save_output(model_name, device_type, metrics_list):
     all_keys = sorted({key for metrics in metrics_list for key in metrics})
 
     # Define the output filename
-    output_file = f"{model_name}-{device_type}.csv"
+    output_file = f"inference-{model_name}-{device_type}.csv"
 
     # Check if file already exists
     file_exists = os.path.isfile(output_file)
@@ -367,7 +367,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
 
 
 
-def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_list, image_path=None):
+def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_list,random_cpu_cores,random_cpu_load, image_path=None):
     devices = ["raspberrypi","jetson","desktop"]
     if device_type not in devices:
         print("device_type should be either raspberrypi, jetson or desktop")
@@ -376,9 +376,8 @@ def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_li
         # Load the ONNX model
         model = onnx.load(model_path)
         graph = model.graph
-        total_parameters, param_shapes = count_parameters(graph)
-        conv_layers, pool_layers, fc_layers, filter_details = analyze_layers(graph)
-        network_type = infer_network_type(graph)
+
+
         sess_options = ort.SessionOptions()
         sess_options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_ENABLE_ALL
         if gpu_needed == True and (device_type=="desktop" or device_type=="jetson"):
@@ -406,10 +405,14 @@ def load_onnx_model(model_path,device_type,model_name,runs,gpu_needed,metrics_li
         read_bytes, write_bytes = run_model(model_name,session,input_names,output_names,runs,image_path)
         end_timestamp = datetime.datetime.now()
         execution_time = count_execution_time(str(start_timestamp),str(end_timestamp))
+        cpu_usage = random_cpu_load * random_cpu_cores / 4
+        disk_usage = psutil.disk_usage("/").percent
         output ={"model_name": model_name,
         "execution_time": execution_time,
         "start_timestamp": start_timestamp,
-        "end_timestamp": end_timestamp }
+        "end_timestamp": end_timestamp,
+        "cpu_usage": cpu_usage,
+        "disk_usage": disk_usage}
         print(output)
         metrics_list.append(output)
 
@@ -583,9 +586,9 @@ if __name__ == '__main__':
         time.sleep(15)
         stresser.get_metrics(random_cpu_cores, random_cpu_load)
         if image:
-            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list,image)
+            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list, random_cpu_cores, random_cpu_load, image)
         else:
-            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list)
+            load_onnx_model(model_path, device_type, model_name, runs, gpu_needed, complete_metrics_list, random_cpu_cores, random_cpu_load)
         stresser.end_stresser()
     #if model_name == "deeplab_part2.onnx":
 

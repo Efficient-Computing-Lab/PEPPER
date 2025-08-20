@@ -40,7 +40,7 @@ from xgboost import XGBRegressor # Import XGBoost Regressor
 # relative to your script.
 CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
 TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
-MODEL_PATH = 'best_trained_xgboost_model.joblib' # Path to save/load the trained model
+MODEL_PATH = '../best_trained_xgboost_model.joblib'  # Path to save/load the trained model
 ALL_CSV_COLUMNS = [
     'conv_layers', 'total_cpu_usage_percent','device_cpu_cores', 'device_load_percent', 'device', 'disk_io_read_bytes',
     'disk_io_write_bytes', 'device_disk_usage_percent', 'end_timestamp', 'execution_number',

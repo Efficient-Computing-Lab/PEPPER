@@ -196,7 +196,7 @@ def model_characteristics(model_name, device_type, device_cpu_usage, disk_usage)
 
 
 def main():
-    model_path = 'best_trained_xgboost_model.joblib'
+    model_path = '../../best_trained_xgboost_model.joblib'
 
     model_names = ["deeplab_part2.onnx"]
 

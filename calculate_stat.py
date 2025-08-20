@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load the output CSV
-df = pd.read_csv("model_inference_predictions.csv")
+df = pd.read_csv("profiler/training/model_inference_predictions.csv")
 
 # Convert to boolean comparison columns if not already present
 df["prediction_correct"] = df["fastest_device_by_prediction"] == df["fastest_device_by_execution_time"]

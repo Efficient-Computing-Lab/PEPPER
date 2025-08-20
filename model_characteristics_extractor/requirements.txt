@@ -1,0 +1,6 @@
+numpy
+onnx
+flask
+werkzeug
+requests
+json

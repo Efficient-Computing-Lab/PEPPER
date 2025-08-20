@@ -23,7 +23,7 @@ It includes:
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, KFold, cross_val_score
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer, root_mean_squared_error
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder, RobustScaler
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
@@ -302,7 +302,10 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     best_model = None
     best_y_val = None
     best_y_pred = None
-
+    all_mae = []
+    all_mse = []
+    all_rmse = []
+    all_r2 = []
     for fold, (train_idx, val_idx) in enumerate(kf.split(X), 1):
         print(f"\nFold {fold}")
         print(f"Training indices shape: {train_idx.shape}")
@@ -316,8 +319,12 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
         mae = mean_absolute_error(y_val, y_pred)
         mse = mean_squared_error(y_val, y_pred)
-        rmse = np.sqrt(mse)
+        rmse = root_mean_squared_error(y_val, y_pred)
         r2 = r2_score(y_val, y_pred)
+        all_mae.append(mae)
+        all_mse.append(mse)
+        all_rmse.append(rmse)
+        all_r2.append(r2)
 
         print(f"Fold {fold} metrics: MAE={mae:.4f}, MSE={mse:.4f}, RMSE={rmse:.4f}, R2={r2:.4f}")
 
@@ -331,7 +338,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     # Final metrics of best model
     final_mae = mean_absolute_error(best_y_val, best_y_pred)
     final_mse = mean_squared_error(best_y_val, best_y_pred)
-    final_rmse = np.sqrt(final_mse)
+    final_rmse = root_mean_squared_error(best_y_val, best_y_pred)
     final_r2 = r2_score(best_y_val, best_y_pred)
 
     print(f"\n✅ Best model from Fold {best_fold} metrics:")
@@ -386,6 +393,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
     # Save MAE error distribution (absolute errors)
     abs_errors = np.abs(best_y_val - best_y_pred)
+    mae_value = np.mean(abs_errors)
     plt.figure(figsize=(30, 20))
     sns.histplot(abs_errors, kde=True, bins=30)
     #plt.title("Mean Absolute Errors (MAE) - Best Model",fontsize=40)

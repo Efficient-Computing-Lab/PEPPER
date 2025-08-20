@@ -1,35 +1,14 @@
 import pandas as pd
 import numpy as np
-from sklearn.externals.array_api_compat import device
-from sklearn.model_selection import train_test_split, KFold, cross_val_score
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, make_scorer
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-import matplotlib.pyplot as plt
-import seaborn as sns
-import os
-from sklearn.linear_model import LinearRegression
-import sys
-import joblib # Import joblib for saving/loading models
-from xgboost import XGBRegressor # Import XGBoost Regressor
+import joblib
 import random
-import argparse
-# --- Configuration Constants ---
-# Ensure this is correct for your environment
-# NOTE: Replace with a valid path on your system where CSVs are located.
-# For example, CSV_DIRECTORY = 'data/' if your CSVs are in a 'data' folder
-# relative to your script.
+import sys
+from datetime import datetime
+from collections import defaultdict
+
 CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
-TARGET_COLUMN_NAME = 'execution_time' # Now a continuous target
+TARGET_COLUMN_NAME = 'execution_time'  # continuous target
 
-ALL_CSV_COLUMNS = [
-    'conv_layers', 'total_device_load_percent','device_cpu_cores', 'device_load_percent', 'device', 'disk_io_read_bytes',
-    'disk_io_write_bytes', 'device_disk_usage_percent', 'end_timestamp', 'execution_number',
-    'execution_time', 'filter_details', 'fully_conn_layers', 'total_memory_usage_percent',
-
-    'pool_layers', 'start_timestamp', 'total_parameters'
-]
 FEATURE_COLUMNS = [
     'conv_layers', 'device_load_percent', 'disk_io_read_bytes',
     'disk_io_write_bytes', 'device_disk_usage_percent',
@@ -37,17 +16,10 @@ FEATURE_COLUMNS = [
     'device',
     'pool_layers', 'total_parameters'
 ]
-NUMERICAL_FEATURES = [
-    'conv_layers', 'disk_io_read_bytes', 'device_load_percent', 'device_cpu_cores',
-    'disk_io_write_bytes', 'device_disk_usage_percent', 'fully_conn_layers',
-    'pool_layers', 'total_parameters'
-]
-CATEGORICAL_FEATURES = [
-    'device',
-]
 
 
-def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
+def model_characteristics(model_name, device_type, device_cpu_usage, disk_usage):
+    # This function is already correct and doesn't need changes.
     if model_name == "alexnet.onnx":
         characteristics = {
             'conv_layers': 5,
@@ -77,7 +49,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "efficientnet.onnx":
         characteristics = {
             'conv_layers': 56,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
@@ -129,7 +101,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "googlenet.onnx":
         characteristics = {
             'conv_layers': 59,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
@@ -142,7 +114,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "mobilenet.onnx":
         characteristics = {
             'conv_layers': 53,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
@@ -155,7 +127,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "resnet.onnx":
         characteristics = {
             'conv_layers': 152,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
@@ -168,7 +140,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "vgg.onnx":
         characteristics = {
             'conv_layers': 13,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
             'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
@@ -181,9 +153,9 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
     elif model_name == "regnet.onnx":
         characteristics = {
             'conv_layers': 74,
-            'device_load_percent':  device_cpu_usage,
+            'device_load_percent': device_cpu_usage,
             'device': device_type,
-            'disk_io_read_bytes': 137749,
+            'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
             'filter_details': 81008,
@@ -196,7 +168,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'conv_layers': 488,
             'device_load_percent': device_cpu_usage,
             'device': device_type,
-            'disk_io_read_bytes': 137749,
+            'disk_io_read_bytes': 456500,
             'disk_io_write_bytes': 4000,
             'device_disk_usage_percent': disk_usage,
             'filter_details': 180396,
@@ -209,7 +181,7 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
             'conv_layers': 40,
             'device_load_percent': device_cpu_usage,
             'device': device_type,
-            'disk_io_read_bytes': 137749,
+            'disk_io_read_bytes': 74018,
             'disk_io_write_bytes': 4128,
             'device_disk_usage_percent': disk_usage,
             'filter_details': 19968,
@@ -221,28 +193,17 @@ def model_characteristics(model_name,device_type,device_cpu_usage,disk_usage):
         print("You provided a wrong model")
         sys.exit(0)
     return characteristics
-# --- Main Execution Flow ---
 
-def load_device_data(csv_path, device_type, device_label):
-    try:
-        df = pd.read_csv(csv_path)
-        df["device_type"] = device_type
-        df["device_label"] = device_label
-        return df
-    except FileNotFoundError:
-        print(f"CSV file '{csv_path}' not found.")
-        return pd.DataFrame()  # Empty dataframe
 
 def main():
     model_path = 'best_trained_xgboost_model.joblib'
 
-    model_names = [
-        "deeplab.onnx"]
+    model_names = ["deeplab_part2.onnx"]
 
     device_csvs = [
-        ("/home/gkorod/evaluation/inference-deeplab-raspberrypi.csv", 0, "RaspberryPi 4B master"),
-        ("/home/gkorod/evaluation/inference-deeplab-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
-        ("/home/gkorod/evaluation/inference-deeplab-jetson.csv", 1, "Jetson Nano"),
+        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-raspberrypi.csv", 0, "RaspberryPi 4B master"),
+        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
+        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-jetson.csv", 1, "Jetson Nano"),
     ]
 
     try:
@@ -251,13 +212,13 @@ def main():
         print(f"Error: Model file '{model_path}' not found.")
         sys.exit(1)
 
-    output_results = []
+    all_runs_results = []
 
     for model_name in model_names:
         print(f"\n--- Processing model: {model_name} ---")
         characteristics_list = []
 
-        # Collect data for this model from all devices
+        # Read all CSVs and combine rows with characteristics
         for csv_file, device_type, device_label in device_csvs:
             try:
                 df = pd.read_csv(csv_file)
@@ -266,68 +227,117 @@ def main():
                 continue
 
             for _, row in df.iterrows():
-                cpu_usage = float(row["cpu_usage"])
-                disk_usage = float(row["disk_usage"])
-                exec_time = float(row["execution_time"])
+                try:
+                    cpu_usage = float(row["cpu_usage"])
+                    disk_usage = float(row["disk_usage"])
+                except Exception as e:
+                    print(f"Skipping row due to error parsing 'cpu_usage' or 'disk_usage': {e}")
+                    continue
+
+                # Convert execution_time string to seconds float
+                try:
+                    time_str = str(row["execution_time"])
+                    if '.' in time_str:
+                        h, m, s_micro = time_str.split(':')
+                        s, micro = s_micro.split('.')
+                        time_obj = datetime(1, 1, 1, int(h), int(m), int(s), int(micro.ljust(6, '0')))
+                    else:
+                        h, m, s = time_str.split(':')
+                        time_obj = datetime(1, 1, 1, int(h), int(m), int(s))
+
+                    exec_time = (
+                            time_obj.hour * 3600
+                            + time_obj.minute * 60
+                            + time_obj.second
+                            + time_obj.microsecond / 1e6
+                    )
+                except Exception as e:
+                    print(f"Skipping row due to time parse error: {e}. Time string: '{row['execution_time']}'")
+                    continue
 
                 characteristics = model_characteristics(
                     model_name, device_type, cpu_usage, disk_usage
                 )
-
                 characteristics_list.append((characteristics, device_label, exec_time))
 
-        # Random device selection
-        select_random_device = random.choice([label for _, _, label in device_csvs])
-        print(f"🎲 Random suggestion for {model_name}: {select_random_device}")
+        # Group entries per run (each run has N devices)
+        num_devices = len(device_csvs)
+        runs = [
+            characteristics_list[i: i + num_devices]
+            for i in range(0, len(characteristics_list), num_devices)
+        ]
 
-        model_predictions = []
+        for run in runs:
+            if len(run) != num_devices:
+                print(f"Warning: Skipping an incomplete run with {len(run)} devices.")
+                continue
 
-        for characteristics, label, exec_time in characteristics_list:
-            try:
+            run_results = []
+
+            for characteristics, label, exec_time in run:
                 features_df = pd.DataFrame([characteristics])[FEATURE_COLUMNS]
                 prediction = loaded_model.predict(features_df)
 
-                result = {
+                run_results.append(
+                    {
+                        "device": label,
+                        "actual_execution_time": exec_time,
+                        "predicted_execution_time": float(prediction[0]),
+                    }
+                )
+
+            # Find fastest devices for this specific run
+            actual_fastest = min(run_results, key=lambda x: x["actual_execution_time"])["device"]
+            predicted_fastest = min(run_results, key=lambda x: x["predicted_execution_time"])["device"]
+
+            # This is the correct random choice logic, performed once per run
+            random_choice = random.choice(["RaspberryPi 4B master", "RaspberryPi 4B worker", "Jetson Nano"])
+
+            all_runs_results.append(
+                {
                     "model": model_name,
-                    "device": label,
-                    "cpu_usage": characteristics["device_load_percent"],
-                    "disk_usage": characteristics["device_disk_usage_percent"],
-                    "actual_execution_time_seconds": exec_time,
-                    "predicted_inference_time_seconds": float(prediction[0]),
-                    "random_selection_device": select_random_device
+                    "run_number": len(all_runs_results) + 1,
+                    "actual_fastest_device": actual_fastest,
+                    "predicted_fastest_device": predicted_fastest,
+                    "random_selection_device": random_choice,
+                    "prediction_was_correct": (predicted_fastest == actual_fastest),
+                    "random_was_fastest": (random_choice == actual_fastest),
                 }
-
-                model_predictions.append(result)
-
-            except Exception as e:
-                print(f"Error during prediction for {label}: {e}")
-
-        # Determine fastest actual device
-        if model_predictions:
-            fastest_actual_entry = min(model_predictions, key=lambda x: x["actual_execution_time_seconds"])
-            fastest_predicted_entry = min(model_predictions, key=lambda x: x["predicted_inference_time_seconds"])
-
-            fastest_actual_device = fastest_actual_entry["device"]
-            fastest_predicted_device = fastest_predicted_entry["device"]
-
-            for entry in model_predictions:
-                entry["fastest_device_by_execution_time"] = fastest_actual_device
-                entry["fastest_device_by_prediction"] = fastest_predicted_device
-                entry["random_was_fastest"] = (entry["random_selection_device"] == fastest_actual_device)
-                entry["prediction_was_correct"] = (fastest_predicted_device == fastest_actual_device)
-                output_results.append(entry)
-
-            print(f"⚡ Fastest actual device for {model_name}: {fastest_actual_device} ({fastest_actual_entry['actual_execution_time_seconds']:.4f}s)")
-            print(f"🧠 Fastest predicted device: {fastest_predicted_device} ({fastest_predicted_entry['predicted_inference_time_seconds']:.4f}s)")
-            print(f"✅ Random was fastest: {select_random_device == fastest_actual_device}")
-            print(f"✅ Prediction was correct: {fastest_predicted_device == fastest_actual_device}")
+            )
 
         print("--- Done ---")
 
-    # Save output to CSV
-    output_df = pd.DataFrame(output_results)
+    output_df = pd.DataFrame(all_runs_results)
     output_df.to_csv("model_inference_predictions.csv", index=False)
     print("\n✅ All results saved to 'model_inference_predictions.csv'")
+
+    # Statistics
+    total_runs = len(output_df)
+    if total_runs > 0:
+        prediction_correct_count = output_df["prediction_was_correct"].sum()
+        random_correct_count = output_df["random_was_fastest"].sum()
+
+        prediction_accuracy = 100.0 * prediction_correct_count / total_runs
+        random_accuracy = 100.0 * random_correct_count / total_runs
+
+        print("\n📊 Overall Statistics:")
+        print(f"Total number of runs: {total_runs}")
+        print(
+            f"✅ Prediction correctly identified the fastest device: {prediction_accuracy:.2f}% ({prediction_correct_count}/{total_runs})"
+        )
+        print(
+            f"🎲 Random selection identified the fastest device: {random_accuracy:.2f}% ({random_correct_count}/{total_runs})"
+        )
+
+        # Add a note about the expected random accuracy to clarify
+        num_devices = len(device_csvs)
+        if num_devices > 0:
+            expected_random_accuracy = 100.0 / num_devices
+            print(f"\n💡 Note: Expected random accuracy for {num_devices} devices is {expected_random_accuracy:.2f}%."
+                  f" The observed random accuracy should be close to this value over many runs, "
+                  f"and a result of 90% is highly unlikely without an error in data or logic.")
+    else:
+        print("⚠️ No prediction results available to compute statistics.")
 
 
 if __name__ == "__main__":

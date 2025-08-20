@@ -1,0 +1,101 @@
+model,run_number,actual_fastest_device,predicted_fastest_device,random_selection_device,prediction_was_correct,random_was_fastest
+deeplab_part2.onnx,1,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,2,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,3,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,4,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,5,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,6,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,7,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,8,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,9,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,10,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,11,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,12,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,13,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,14,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,15,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,16,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,17,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,18,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,19,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,20,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,21,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,22,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,23,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,24,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,25,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,26,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,27,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,28,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,29,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,30,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,31,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+deeplab_part2.onnx,32,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,33,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
+deeplab_part2.onnx,34,RaspberryPi 4B master,RaspberryPi 4B worker,Jetson Nano,False,False
+deeplab_part2.onnx,35,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,36,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,37,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,38,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,39,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,40,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,41,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,42,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,43,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,44,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,45,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,46,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,47,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,48,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,49,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,50,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,51,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,52,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,53,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,54,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,55,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,56,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,57,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,58,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,59,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,60,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,61,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,62,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
+deeplab_part2.onnx,63,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,64,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,65,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
+deeplab_part2.onnx,66,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,67,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B master,False,False
+deeplab_part2.onnx,68,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,69,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,70,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,71,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,72,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,73,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,74,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,75,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,76,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,77,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,78,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,79,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,80,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,81,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,82,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,83,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,84,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,85,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,86,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,87,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,88,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,89,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,90,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,91,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,92,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,93,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,94,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,95,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+deeplab_part2.onnx,96,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,97,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+deeplab_part2.onnx,98,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,99,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+deeplab_part2.onnx,100,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False

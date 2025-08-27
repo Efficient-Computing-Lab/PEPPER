@@ -2,6 +2,3 @@
 .venv
 # Exclude all PDF files
 *.pdf
-
-# Exclude all PNG files
-*.png

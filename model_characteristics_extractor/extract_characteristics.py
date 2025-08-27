@@ -10,14 +10,16 @@ def load_model_as_graph(model_path):
     return graph
 
 
-def start_profiling(conv_layers, pool_layers, fc_layers, total_filters_details, total_parameters,filename):
+def start_profiling(conv_layers, pool_layers, fc_layers, total_filters_details, total_parameters,filename, model_input_size,model_output_size):
     characteristics = {
         'conv_layers': conv_layers,
         'filter_details': total_filters_details,
-        'fully_conn_layers': fc_layers,
+        'fc_layers': fc_layers,
         'pool_layers': pool_layers,
         'total_parameters': total_parameters,
-        'model': filename
+        'model': filename,
+        'model_output_size': model_output_size,
+        'model_input_size': model_input_size
     }
 
     # Convert to JSON

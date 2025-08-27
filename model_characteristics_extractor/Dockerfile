@@ -8,7 +8,7 @@ WORKDIR /app
 # This is a common practice to leverage Docker's build cache
 COPY . .
 # 4. Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # 5. Copy the rest of the application files
 

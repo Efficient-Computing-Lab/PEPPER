@@ -3,4 +3,3 @@ onnx
 flask
 werkzeug
 requests
-json

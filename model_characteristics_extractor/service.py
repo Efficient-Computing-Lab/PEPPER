@@ -27,6 +27,11 @@ def allowed_file(filename):
 def upload_file():
     """Handles POST requests to upload a file."""
     # Check if the POST request has the file part
+    json_data = request.get_json()  # won't throw error if no JSON
+
+    if json_data:
+        model_input_size = json_data.get("model_input_size")
+        model_output_size = json_data.get("model_output_size")
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
 
@@ -50,7 +55,7 @@ def upload_file():
         model_as_graph= extract_characteristics.load_model_as_graph(filepath)
         conv_layers, pool_layers, fc_layers, total_filters_details = extract_characteristics.analyze_layers(model_as_graph)
         total_parameters, param_shapes = extract_characteristics.count_parameters(model_as_graph)
-        extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters, filename)
+        extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters, filename, model_input_size, model_output_size)
         return jsonify({
             "message": "File uploaded successfully",
             "filename": filename,
@@ -63,4 +68,4 @@ def upload_file():
 # 5. Run the application
 if __name__ == '__main__':
     # Start the Flask development server
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=7002)

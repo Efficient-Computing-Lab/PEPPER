@@ -1,4 +1,5 @@
 # Profiler
+![Profiler](profiler.png)
 
 ## Training
 To train the XGBoost model of the Profiler, run the following command:

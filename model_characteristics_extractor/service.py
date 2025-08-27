@@ -2,7 +2,6 @@ import os
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import extract_characteristics
-import model_characteristics_extractor
 # 1. Create the Flask app instance
 app = Flask(__name__)
 
@@ -51,7 +50,7 @@ def upload_file():
         model_as_graph= extract_characteristics.load_model_as_graph(filepath)
         conv_layers, pool_layers, fc_layers, total_filters_details = extract_characteristics.analyze_layers(model_as_graph)
         total_parameters, param_shapes = extract_characteristics.count_parameters(model_as_graph)
-        extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters)
+        extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters, filename)
         return jsonify({
             "message": "File uploaded successfully",
             "filename": filename,

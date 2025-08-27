@@ -6,13 +6,13 @@ WORKDIR /app
 
 # 3. Copy the requirements file into the container
 # This is a common practice to leverage Docker's build cache
-COPY requirements.txt .
+COPY service/ .
 COPY best_trained_xgboost_model.joblib .
 # 4. Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # 5. Copy the rest of the application files
 
 
 # 6. Define the command to run the application
-CMD ["python", "your_app_name.py"]
+CMD ["python", "service.py"]

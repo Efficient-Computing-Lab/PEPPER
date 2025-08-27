@@ -6,7 +6,7 @@ import sys
 from datetime import datetime
 from collections import defaultdict
 
-CSV_DIRECTORY = '/home/gkorod/Downloads/mydataset/'
+
 TARGET_COLUMN_NAME = 'execution_time'  # continuous target
 
 FEATURE_COLUMNS = [
@@ -198,12 +198,12 @@ def model_characteristics(model_name, device_type, device_cpu_usage, disk_usage)
 def main():
     model_path = '../../best_trained_xgboost_model.joblib'
 
-    model_names = ["deeplab_part2.onnx"]
+    model_names = ["deeplab.onnx"]
 
     device_csvs = [
-        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-raspberrypi.csv", 0, "RaspberryPi 4B master"),
-        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
-        ("/home/gkorod/evaluation/inference-deeplab_part2.onnx-jetson.csv", 1, "Jetson Nano"),
+        ("/home/gkorod/evaluation/inference-regnet.onnx-raspberrypi.csv", 0, "RaspberryPi 4B master"),
+        ("/home/gkorod/evaluation/inference-regnet.onnx-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
+        ("/home/gkorod/evaluation/inference-regnet.onnx-jetson.csv", 1, "Jetson Nano"),
     ]
 
     try:
@@ -236,21 +236,10 @@ def main():
 
                 # Convert execution_time string to seconds float
                 try:
-                    time_str = str(row["execution_time"])
-                    if '.' in time_str:
-                        h, m, s_micro = time_str.split(':')
-                        s, micro = s_micro.split('.')
-                        time_obj = datetime(1, 1, 1, int(h), int(m), int(s), int(micro.ljust(6, '0')))
-                    else:
-                        h, m, s = time_str.split(':')
-                        time_obj = datetime(1, 1, 1, int(h), int(m), int(s))
 
-                    exec_time = (
-                            time_obj.hour * 3600
-                            + time_obj.minute * 60
-                            + time_obj.second
-                            + time_obj.microsecond / 1e6
-                    )
+
+                    exec_time = pd.to_timedelta(str(row["execution_time"])).total_seconds()
+
                 except Exception as e:
                     print(f"Skipping row due to time parse error: {e}. Time string: '{row['execution_time']}'")
                     continue
@@ -261,49 +250,58 @@ def main():
                 characteristics_list.append((characteristics, device_label, exec_time))
 
         # Group entries per run (each run has N devices)
-        num_devices = len(device_csvs)
-        runs = [
-            characteristics_list[i: i + num_devices]
-            for i in range(0, len(characteristics_list), num_devices)
-        ]
+        # First, store by device
+        device_runs = {label: [] for _, _, label in device_csvs}
 
-        for run in runs:
-            if len(run) != num_devices:
-                print(f"Warning: Skipping an incomplete run with {len(run)} devices.")
+        for csv_file, device_type, device_label in device_csvs:
+            try:
+                df = pd.read_csv(csv_file)
+            except FileNotFoundError:
+                print(f"Error: CSV file '{csv_file}' not found.")
                 continue
 
-            run_results = []
+            for _, row in df.iterrows():
+                try:
+                    cpu_usage = float(row["cpu_usage"])
+                    disk_usage = float(row["disk_usage"])
+                    exec_time = pd.to_timedelta(str(row["execution_time"])).total_seconds()
+                except Exception as e:
+                    print(f"Skipping row due to error parsing row in {device_label}: {e}")
+                    continue
 
-            for characteristics, label, exec_time in run:
+                characteristics = model_characteristics(model_name, device_type, cpu_usage, disk_usage)
+                device_runs[device_label].append((characteristics, exec_time))
+
+        # Now zip runs together by index
+        num_runs = min(len(runs) for runs in device_runs.values())
+        for run_idx in range(num_runs):
+            run_results = []
+            for device_label, runs in device_runs.items():
+                characteristics, exec_time = runs[run_idx]
                 features_df = pd.DataFrame([characteristics])[FEATURE_COLUMNS]
                 prediction = loaded_model.predict(features_df)
 
-                run_results.append(
-                    {
-                        "device": label,
-                        "actual_execution_time": exec_time,
-                        "predicted_execution_time": float(prediction[0]),
-                    }
-                )
+                run_results.append({
+                    "device": device_label,
+                    "actual_execution_time": exec_time,
+                    "predicted_execution_time": float(prediction[0]),
+                })
 
-            # Find fastest devices for this specific run
+            # Pick winners
             actual_fastest = min(run_results, key=lambda x: x["actual_execution_time"])["device"]
             predicted_fastest = min(run_results, key=lambda x: x["predicted_execution_time"])["device"]
 
-            # This is the correct random choice logic, performed once per run
-            random_choice = random.choice(["RaspberryPi 4B master", "RaspberryPi 4B worker", "Jetson Nano"])
+            random_choice = random.choice(list(device_runs.keys()))
 
-            all_runs_results.append(
-                {
-                    "model": model_name,
-                    "run_number": len(all_runs_results) + 1,
-                    "actual_fastest_device": actual_fastest,
-                    "predicted_fastest_device": predicted_fastest,
-                    "random_selection_device": random_choice,
-                    "prediction_was_correct": (predicted_fastest == actual_fastest),
-                    "random_was_fastest": (random_choice == actual_fastest),
-                }
-            )
+            all_runs_results.append({
+                "model": model_name,
+                "run_number": len(all_runs_results) + 1,
+                "actual_fastest_device": actual_fastest,
+                "predicted_fastest_device": predicted_fastest,
+                "random_selection_device": random_choice,
+                "prediction_was_correct": (predicted_fastest == actual_fastest),
+                "random_was_fastest": (random_choice == actual_fastest),
+            })
 
         print("--- Done ---")
 

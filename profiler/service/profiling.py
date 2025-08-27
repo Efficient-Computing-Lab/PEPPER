@@ -35,17 +35,23 @@ def perform_query():
 
             for result in results:
                 metric_value = result.get('value')
-                value = "% .2f" % float(metric_value[1])
+                value = "% .1f" % float(metric_value[1])
                 report_time = metric_value[0]
                 metric = result.get('metric')
                 metric_name = metric.get('__name__')
                 hostname = metric.get('instance')
                 if json_key[0] == "cpu_usage_query":
-                    cpu_result = {'node': hostname, 'cpu_usage(percentage)': int(value)}
+                    cpu_result = {'node': hostname, 'cpu_usage(percentage)': int(float(value.strip()))}
                 if json_key[0] == "disk_usage_query":
-                    disk_result = {'node': hostname, 'disk_usage(percentage)': float(f"{value:.1f}")}
+                    disk_result = {'node': hostname, 'disk_usage(percentage)': float(value.strip())}
                 if json_key[0] == "device_type_query":
-                    device_result = {'node': hostname, 'class':metric.get("char_node_class"), 'device_model':metric.get("char_node_device_model_name"),
+                    if "Raspberry" in metric.get("char_node_device_model_name"):
+                        device = "raspberrypi"
+                    elif "Jetson" in metric.get("char_node_device_model_name"):
+                        device = "jetson"
+                    else:
+                        device = metric.get("char_node_device_model_name")
+                    device_result = {'node': hostname, 'class':metric.get("char_node_class"), 'device_model':device,
                                     'node_uuid':metric.get("char_node_uuid")}
 
     return cpu_result, disk_result, device_result
@@ -65,8 +71,8 @@ def run_profiling(characteristics,model_name):
             'conv_layers': characteristics.get("conv_layers"),
             'device_load_percent': cpu_result.get("cpu_usage(percentage)"),
             'device': device_result.get("device_model"),
-            'disk_io_read_bytes': characteristics.get("disk_io_read_bytes"),
-            'disk_io_write_bytes': characteristics.get("disk_io_write_bytes"),
+            'disk_io_read_bytes': characteristics.get("model_input_size"),
+            'disk_io_write_bytes': characteristics.get("model_output_size"),
             'device_disk_usage_percent': disk_result.get("disk_usage(percentage)"),
             'filter_details': characteristics.get("filter_details"),
             'fully_conn_layers': characteristics.get("fc_layers"),

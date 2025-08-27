@@ -17,8 +17,7 @@ def profiling():
         fc_layers = data.get('fc_layers')
         filter_details = data.get('filter_details')
         total_parameters = data.get('total_parameters')
-        input_bytes = data.get('disk_io_read_bytes')
-        output_bytes = data.get('disk_io_write_bytes')
+
 
         # Example: process / log / store the profiling info
         print(f"Model: {model_name}")
@@ -29,8 +28,6 @@ def profiling():
         print(f"Fully Connected Layers: {fc_layers}")
         print(f"Filter Details: {filter_details}")
         print(f"Total Parameters: {total_parameters}")
-        print(f"Disk IO Read Bytes: {input_bytes}")
-        print(f"Disk IO Write Bytes: {output_bytes}")
         data.pop("model_name", None)
         profiling_prediction = run_profiling(data,model_name)
         # Build response

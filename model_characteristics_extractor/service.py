@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # 2. Configure the upload folder and allowed extensions
 # This is where uploaded files will be saved
-UPLOAD_FOLDER = '/app/uploads'
+UPLOAD_FOLDER = '/storage/models/'
 ALLOWED_EXTENSIONS = {'onnx'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -27,13 +27,8 @@ def allowed_file(filename):
 def upload_file():
     """Handles POST requests to upload a file."""
     # Check if the POST request has the file part
-    json_data = request.get_json()  # won't throw error if no JSON
-
-    if json_data:
-        model_input_size = json_data.get("model_input_size")
-        model_output_size = json_data.get("model_output_size")
-    if 'file' not in request.files:
-        return jsonify({"error": "No file part in the request"}), 400
+    model_input_size = int(request.form.get("model_input_size"))
+    model_output_size = int(request.form.get("model_output_size"))
 
     file = request.files['file']
 
@@ -55,12 +50,14 @@ def upload_file():
         model_as_graph= extract_characteristics.load_model_as_graph(filepath)
         conv_layers, pool_layers, fc_layers, total_filters_details = extract_characteristics.analyze_layers(model_as_graph)
         total_parameters, param_shapes = extract_characteristics.count_parameters(model_as_graph)
-        extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters, filename, model_input_size, model_output_size)
-        return jsonify({
+        prediction_results = extract_characteristics.start_profiling(conv_layers,pool_layers,fc_layers, total_filters_details, total_parameters, filename, model_input_size, model_output_size)
+        response = {
             "message": "File uploaded successfully",
-            "filename": filename,
             "filepath": filepath
-        }), 201
+        }
+        prediction_results.pop("message")
+        complete_results = {**response,**prediction_results}
+        return jsonify(complete_results), 201
     else:
         return jsonify({"error": "File type not allowed"}), 400
 

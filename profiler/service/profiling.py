@@ -46,11 +46,11 @@ def perform_query():
                     disk_result = {'node': hostname, 'disk_usage(percentage)': float(value.strip())}
                 if json_key[0] == "device_type_query":
                     if "Raspberry" in metric.get("char_node_device_model_name"):
-                        device = "raspberrypi"
+                        device = 0
                     elif "Jetson" in metric.get("char_node_device_model_name"):
-                        device = "jetson"
+                        device = 1
                     else:
-                        device = metric.get("char_node_device_model_name")
+                        device = 0
                     device_result = {'node': hostname, 'class':metric.get("char_node_class"), 'device_model':device,
                                     'node_uuid':metric.get("char_node_uuid")}
 

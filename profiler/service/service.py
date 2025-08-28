@@ -9,7 +9,7 @@ def profiling():
         data = request.get_json()
 
         # Extract fields (optional validation)
-        model_name = data.get('model_name')
+        model_name = data.get('model')
         model_input_size = data.get('model_input_size')
         model_output_size = data.get('model_output_size')
         conv_layers = data.get('conv_layers')
@@ -34,7 +34,7 @@ def profiling():
         response = {
             "status": "success",
             "message": "Profiling data received",
-            "received_data": data,
+            "model_characteristics": data,
             "profiling_prediction": profiling_prediction
         }
         logging.info(response)

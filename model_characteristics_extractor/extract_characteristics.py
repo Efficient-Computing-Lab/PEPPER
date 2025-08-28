@@ -44,7 +44,7 @@ def count_parameters(graph):
         shape = tuple(initializer.dims)
         total_params += np.prod(shape)
         param_shapes[initializer.name] = shape
-    return total_params, param_shapes
+    return int(total_params), param_shapes
 
 def analyze_layers(graph):
     from collections import defaultdict

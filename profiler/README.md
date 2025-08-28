@@ -21,7 +21,7 @@ by doing the following steps:
 ### Build the Docker image
 The following command builds the image and stores it in Dockerhub
 ```bash 
-docker buildx build --platform linux/amd64 -t gkorod/model_characteristics_extractor:v1.0 --push --no-cache
+docker buildx build --platform linux/amd64 -t gkorod/profiler:v1.0 --push --no-cache
 ```
 ### Run Docker Container
 The following command initiates the Profiler inside a Docker container.
@@ -39,7 +39,7 @@ Profiler expects this kind of input:
 ```bash 
 curl --location 'http://147.102.19.159:7001/api/profiling' \
 --header 'Content-Type: application/json' \
---data '{       "model_name" : "model",
+--data '{       "model" : "model",
         "conv_layers" : 66666666,
         "pool_layers" : 77777777,
         "fc_layers" : 34535353535,

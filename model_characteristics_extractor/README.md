@@ -15,13 +15,10 @@ The following command builds the image and stores it in Dockerhub
 docker buildx build --platform linux/amd64 -t gkorod/model_characteristics_extractor:v1.0 --push --no-cache
 ```
 ### Run Docker Container
-The following command initiates the Profiler inside a Docker container.
-Profiler requires to know a Prometheus endpoint in order to retrieve metrics
-regarding the devices.
+The following command initiates the Model Characteristics Extractor inside a Docker container.
+Model Characteristics Extractor requires to know the Profiler endpoint in order provide the
+answer of the profiling upon request.
 
-The Prometheus monitoring mechanism 
-should use [Node Exporter](https://github.com/prometheus/node_exporter) 
-and [Characterization-Agent v1.2](https://github.com/Efficient-Computing-Lab/EdgeCloud-Mon/tree/main/char_agent)
 ```bash
 docker run -d -t -p 7002:7002 -e PROFILING_SERVICE_URL=147.102.19.159:7001/api/profiling gkorod/model_characteristics_extractor:v1.0
 ```

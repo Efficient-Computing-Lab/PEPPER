@@ -25,14 +25,17 @@ docker buildx build --platform linux/amd64 -t gkorod/profiler:v1.0 --push --no-c
 ```
 ### Run Docker Container
 The following command initiates the Profiler inside a Docker container.
-Profiler requires to know a Prometheus endpoint in order to retrieve metrics
+Profiler requires to interact with a Prometheus endpoint in order to retrieve metrics
 regarding the devices.
 
 The Prometheus monitoring mechanism 
 should use [Node Exporter](https://github.com/prometheus/node_exporter) 
 and [Characterization-Agent v1.2](https://github.com/Efficient-Computing-Lab/EdgeCloud-Mon/tree/main/char_agent)
+
+During the development, we tested profiler with this [monitoring stack](https://github.com/Efficient-Computing-Lab/EdgeCloud-Mon/) that is able to monitor
+every node of a Kubernetes cluster. Developers can use any Prometheus based monitoring stack that use the above mentioned agents
 ```bash
-docker run -d -t -p 7001:7001 -e PROMETHEUS_IP=147.102.19.159:9090 gkorod/profiler:v1.0
+docker run -d -t -p 7001:7001 -e PROMETHEUS_IP=147.102.19.159:9090 gkorod/profiler:v1.1
 ```
 ### Send Request
 Profiler expects this kind of input:

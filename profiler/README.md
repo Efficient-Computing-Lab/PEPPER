@@ -32,8 +32,8 @@ docker buildx build --platform linux/amd64 -t gkorod/profiler:v1.1 --push --no-c
 ```
 ### Run Docker Container
 The following command initiates the Profiler inside a Docker container.
-Profiler requires to interact with a Prometheus endpoint in order to retrieve metrics
-regarding the devices.
+Profiler requires to interact with a Prometheus endpoint in order to retrieve metrics and resource characteristics
+regarding the devices of the cluster.
 
 The Prometheus monitoring mechanism 
 should use [Node Exporter](https://github.com/prometheus/node_exporter) 
@@ -45,7 +45,7 @@ every node of a Kubernetes cluster. Developers can use any Prometheus based moni
 docker run -d -t -p 7001:7001 -e PROMETHEUS_IP=147.102.19.159:9090 gkorod/profiler:v1.1
 ```
 ### Send Request
-Profiler expects this kind of input:
+Profiler container expects this kind of input:
 ```bash 
 curl --location 'http://147.102.19.159:7001/api/profiling' \
 --header 'Content-Type: application/json' \
@@ -57,4 +57,32 @@ curl --location 'http://147.102.19.159:7001/api/profiling' \
         "total_parameters" : 10000000000000000000,
         "model_input_size": 345343543,
         "model_output_size": 123421435}'
+```
+
+### Response
+Profiler container will provide the prediction of the device that will run faster the model
+```json
+{
+  "message": "Profiling data received",
+  "model_characteristics": {
+    "conv_layers": 66666666,
+    "fc_layers": 34535353535,
+    "filter_details": 66,
+    "model": "model",
+    "model_input_size": 345343543,
+    "model_output_size": 123421435,
+    "pool_layers": 77777777,
+    "total_parameters": 10000000000000000000
+  },
+  "profiling_prediction": {
+    "class": "Computer",
+    "device_model": "Raspberry Pi 4B",
+    "model": "model",
+    "node": "rpi-1",
+    "node_uuid": "4e849968-21fc-11ed-a346-204ef6b52cc7",
+    "predicted_execution_time": 14.74413776397705
+  },
+  "status": "success"
+}
+
 ```

@@ -18,10 +18,17 @@ The output of the script would be the actual model. It will be saved with the na
 To use the Profiler it is suggested to run its container version
 by doing the following steps:
 
-### Build the Docker image
-The following command builds the image and stores it in Dockerhub
+### Build the Docker image locally
+The following command builds the image and stores it in your local machine
+
 ```bash 
-docker buildx build --platform linux/amd64 -t gkorod/profiler:v1.0 --push --no-cache
+docker build --platform linux/amd64 -t profiler:v1.1 .
+```
+### Build the Docker image and push to Dockerhub
+The following command builds the image and stores it in Dockerhub
+
+```bash 
+docker buildx build --platform linux/amd64 -t gkorod/profiler:v1.1 --push --no-cache .
 ```
 ### Run Docker Container
 The following command initiates the Profiler inside a Docker container.

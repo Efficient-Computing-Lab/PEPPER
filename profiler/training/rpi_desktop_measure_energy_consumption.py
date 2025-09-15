@@ -18,5 +18,3 @@ def measure_method():
     df = pd.read_csv(os.getcwd() + '/output.csv', header=None, names=columns)
     energy_value = df['CPU Power'].iloc[0]
     return energy_value
-
-measure_method()

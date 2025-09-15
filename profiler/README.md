@@ -17,18 +17,18 @@ cd training
 Activate the profiling environment:
 ```bash
 source /opt/miniconda3/etc/profile.d/conda.sh
-conda activate myenv
+conda activate profiling
 ```
 
 To execute the script do the following:
 ```bash
-python collection_metrics.py --iterations 100 --device_type raspberrypi --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type raspberrypi --image_path <path_of_folder_with_images> --gpu_needed false
 ```
 ```bash
-python collection_metrics.py --iterations 100 --device_type desktop --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type desktop --image_path <path_of_folder_with_images> --gpu_needed false
 ```
 ```bash
-python collection_metrics.py --iterations 100 --device_type jetson --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type jetson --image_path <path_of_folder_with_images> --gpu_needed false
 ```
 
 ## Training

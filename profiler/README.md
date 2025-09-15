@@ -4,6 +4,32 @@ Finally, the Profiler predicts in which device of the cluster the model will run
 
 
 ![Profiler](./profiler.png)
+## Collecting metrics
+The first thing to do in order to train the Profiler is to collect resource metrics
+and generate a dataset for an .onnx model.
+
+Install Miniconda and create the appropriate virtual environment:
+```bash
+cd training
+./initiate-collecting-venv.sh
+```
+
+Activate the profiling environment:
+```bash
+source /opt/miniconda3/etc/profile.d/conda.sh
+conda activate myenv
+```
+
+To execute the script do the following:
+```bash
+python models_profiling.py --iterations 100 --device_type raspberrypi --image_path ./test_images --gpu_needed false
+```
+```bash
+python models_profiling.py --iterations 100 --device_type desktop --image_path ./test_images --gpu_needed false
+```
+```bash
+python models_profiling.py --iterations 100 --device_type jetson --image_path ./test_images --gpu_needed false
+```
 
 ## Training
 To train the XGBoost model of the Profiler, run the following command:

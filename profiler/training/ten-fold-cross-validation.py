@@ -292,7 +292,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
     model_pipeline = Pipeline(steps=[
         ('preprocessor', preprocessor),
-        ('regressor', XGBRegressor(objective='reg:squarederror', n_estimators=100,
+        ('regressor', XGBRegressor(objective='reg:squarederror', n_estimators=145,
                                    learning_rate=0.1, max_depth=6, random_state=42))
     ])
 
@@ -349,12 +349,12 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
     # Save residuals
     errors = best_y_val - best_y_pred
-    plt.figure(figsize=(30, 20))
+    plt.figure(figsize=(50, 50))
     sns.histplot(errors, kde=True, bins=30)
     #plt.title(f'Residuals of Best Model (Fold {best_fold})',fontsize=40)
-    plt.xlabel('Prediction Error', fontsize=40,fontweight="bold")
-    plt.ylabel('Frequency', fontsize=40,fontweight="bold")
-    plt.tick_params(axis='both', which='major', labelsize=40)
+    plt.xlabel('Prediction Error', fontsize=145,fontweight="bold")
+    plt.ylabel('Frequency', fontsize=145,fontweight="bold")
+    plt.tick_params(axis='both', which='major', labelsize=145)
     plt.tight_layout()
     plt.savefig('best_model_residuals.pdf')
     print("Saved: best_model_residuals.pdf")
@@ -369,7 +369,7 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
         y=best_y_pred,
         alpha=0.6,
         color='blue',
-        s=200,  # bubble size
+        s=145,  # bubble size
         edgecolor='black'  # optional: to improve visibility
     )
 
@@ -382,9 +382,9 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
         linewidth=4
     )
 
-    plt.xlabel("Actual", fontsize=40, fontweight="bold")
-    plt.ylabel("Predicted", fontsize=40, fontweight="bold")
-    plt.tick_params(axis='both', which='major', labelsize=40)
+    plt.xlabel("Actual", fontsize=145, fontweight="bold")
+    plt.ylabel("Predicted", fontsize=145, fontweight="bold")
+    plt.tick_params(axis='both', which='major', labelsize=145)
     #plt.title("Predicted vs Actual (Best Model)", fontsize=40)
     plt.tight_layout()
     plt.savefig('best_model_pred_vs_actual.pdf')
@@ -394,12 +394,12 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
     # Save MAE error distribution (absolute errors)
     abs_errors = np.abs(best_y_val - best_y_pred)
     mae_value = np.mean(abs_errors)
-    plt.figure(figsize=(30, 20))
+    plt.figure(figsize=(50, 50))
     sns.histplot(abs_errors, kde=True, bins=30)
     #plt.title("Mean Absolute Errors (MAE) - Best Model",fontsize=40)
-    plt.xlabel("Mean Absolute Error", fontsize=40,fontweight="bold")
-    plt.ylabel("Frequency", fontsize=40,fontweight="bold")
-    plt.tick_params(axis='both', which='major', labelsize=40)
+    plt.xlabel("Mean Absolute Error", fontsize=145,fontweight="bold")
+    plt.ylabel("Frequency", fontsize=145,fontweight="bold")
+    plt.tick_params(axis='both', which='major', labelsize=145)
     plt.tight_layout()
     plt.savefig('best_model_mae_distribution.pdf')
     print("Saved: best_model_mae_distribution.pdf")
@@ -407,12 +407,12 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
     # Save squared error distribution (MSE)
     squared_errors = (best_y_val - best_y_pred) ** 2
-    plt.figure(figsize=(30, 20))
+    plt.figure(figsize=(50, 50))
     sns.histplot(squared_errors, kde=True, bins=30)
     #plt.title("Mean Squared Errors (MSE) - Best Model", fontsize=40)
-    plt.xlabel("Mean Squared Error", fontsize=40,fontweight="bold")
-    plt.ylabel("Frequency", fontsize=40,fontweight="bold")
-    plt.tick_params(axis='both', which='major', labelsize=40)
+    plt.xlabel("Mean Squared Error", fontsize=145,fontweight="bold")
+    plt.ylabel("Frequency", fontsize=145,fontweight="bold")
+    plt.tick_params(axis='both', which='major', labelsize=145)
     plt.tight_layout()
     plt.savefig('best_model_mse_distribution.pdf')
     print("Saved: best_model_mse_distribution.pdf")
@@ -420,12 +420,12 @@ def perform_cross_validation(X: pd.DataFrame, y: pd.Series, preprocessor: Column
 
     # Save RMSE distribution (root of squared errors)
     rmse_errors = np.sqrt(squared_errors)
-    plt.figure(figsize=(30, 20))
+    plt.figure(figsize=(50, 50))
     sns.histplot(rmse_errors, kde=True, bins=30)
     #plt.title("Root Mean Squared Errors (RMSE) - Best Model", fontsize=40)
-    plt.xlabel("Root Mean Squared Error", fontsize=40,fontweight="bold")
-    plt.ylabel("Frequency", fontsize=40,fontweight="bold")
-    plt.tick_params(axis='both', which='major', labelsize=40)
+    plt.xlabel("Root Mean Squared Error", fontsize=145,fontweight="bold")
+    plt.ylabel("Frequency", fontsize=145,fontweight="bold")
+    plt.tick_params(axis='both', which='major', labelsize=145)
     plt.tight_layout()
     plt.savefig('best_model_rmse_distribution.pdf')
     print("Saved: best_model_rmse_distribution.pdf")

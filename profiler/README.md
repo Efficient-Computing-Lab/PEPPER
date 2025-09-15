@@ -22,13 +22,13 @@ conda activate myenv
 
 To execute the script do the following:
 ```bash
-python models_profiling.py --iterations 100 --device_type raspberrypi --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type raspberrypi --image_path ./test_images --gpu_needed false
 ```
 ```bash
-python models_profiling.py --iterations 100 --device_type desktop --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type desktop --image_path ./test_images --gpu_needed false
 ```
 ```bash
-python models_profiling.py --iterations 100 --device_type jetson --image_path ./test_images --gpu_needed false
+python collection_metrics.py --iterations 100 --device_type jetson --image_path ./test_images --gpu_needed false
 ```
 
 ## Training

@@ -25,6 +25,9 @@ from pathlib import Path
 import subprocess
 import re
 
+from sympy.physics.units import energy
+
+
 def load_tensors(input_name, input_data):
     dict_input ={}
     for input in input_name:
@@ -381,10 +384,18 @@ def run_model(model_name,session,input_name,output_name,profiling_thread,runs,im
 
 def profiling_onnx_model(runs,device_type,metrics_list,gpu_needed,random_cpu_cores,random_cpu_load):
     print("Calculating metrics...")
+    energy_consumption =0
     current_timestamp = datetime.datetime.now()
     cpu_usage = psutil.cpu_percent()
     memory_usage = psutil.virtual_memory().percent
     disk_usage = psutil.disk_usage("/").percent
+    if device_type == "raspberrypi" or device_type == "desktop":
+        import rpi_desktop_measure_energy_consumption
+        energy_consumption = rpi_desktop_measure_energy_consumption.measure_energy()
+    if device_type == "jetson":
+        import jetson_measure_energy_consumption
+        energy_consumption = jetson_measure_energy_consumption.measure_method()
+        print(energy_consumption)
     # Create a JSON with the metrics
     if not gpu_needed:
         metrics = {
@@ -395,7 +406,8 @@ def profiling_onnx_model(runs,device_type,metrics_list,gpu_needed,random_cpu_cor
                 "device_disk_usage_percent": disk_usage,
                 "device_cpu_cores": random_cpu_cores,
                 "device_load_percent": random_cpu_load,
-                "execution_number": runs
+                "execution_number": runs,
+                "cpu_energy_consumption": energy_consumption
             }
     if gpu_needed:
         gpu_stats = gpustat.new_query().jsonify()

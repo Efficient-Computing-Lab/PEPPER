@@ -10,7 +10,7 @@ def measure_method():
     rounded to three decimal places.
     """
     # Run PowerJoular and output CSV (without & for proper blocking)
-    subprocess.run(["powerjoular", "-o", "output.csv"])
+    subprocess.run(["powerjoular -o output.csv &"],shell=True)
 
     # Wait until CSV exists (optional, usually immediate after run)
     while not os.path.exists(os.getcwd() + '/output.csv'):

@@ -35,6 +35,6 @@ def measure_method():
 
     # Get the first CPU Power value and round to 3 decimals
     energy_value = np.float64(df['CPU Power'].iloc[0])
-    energy_value = np.round(float(energy_value), 3)  # keeps 3 digits after decimal
+    energy_value = np.round(energy_value, 3)  # keeps 3 digits after decimal
 
-    return energy_value
+    return float(energy_value)

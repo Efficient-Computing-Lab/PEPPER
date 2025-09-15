@@ -391,7 +391,7 @@ def profiling_onnx_model(runs,device_type,metrics_list,gpu_needed,random_cpu_cor
     disk_usage = psutil.disk_usage("/").percent
     if device_type == "raspberrypi" or device_type == "desktop":
         import rpi_desktop_measure_energy_consumption
-        energy_consumption = rpi_desktop_measure_energy_consumption.measure_energy()
+        energy_consumption = rpi_desktop_measure_energy_consumption.measure_method()
     if device_type == "jetson":
         import jetson_measure_energy_consumption
         energy_consumption = jetson_measure_energy_consumption.measure_method()

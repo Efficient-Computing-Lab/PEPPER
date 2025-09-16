@@ -39,4 +39,7 @@ def measure_method():
     energy_value = np.round(energy_value, 3)  # keeps 3 digits after decimal
     # Delete the CSV file
     os.remove(output_file)
+    print(energy_value)
     return float(energy_value)
+
+measure_method()

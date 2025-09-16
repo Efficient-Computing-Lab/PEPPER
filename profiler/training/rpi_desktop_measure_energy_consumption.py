@@ -41,5 +41,3 @@ def measure_method():
     os.remove(output_file)
     print(energy_value)
     return float(energy_value)
-
-measure_method()

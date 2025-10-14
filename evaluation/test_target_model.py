@@ -25,6 +25,7 @@ from pathlib import Path
 import subprocess
 import re
 import stresser
+import detect
 
 def load_tensors(input_name, input_data):
     dict_input ={}
@@ -274,10 +275,15 @@ def count_execution_time(start_time,end_time):
 def run_model(model_name,session,input_name,output_name,runs,image_path=None):
     read_bytes = 0
     write_bytes = 0
+    if model_name =="yolov5.onnx":
+        read_bytes = os.path.getsize(image_path)
+        result = detect.run(source=image_path,weights=model_name)
+        write_bytes = sum(record.nbytes for record in result)
     if model_name == "deeplab_part1.onnx" or model_name == "deeplab.onnx" or model_name =="nasnet.onnx":
     #if len(input_name) == 1 and len(output_name) >=
         #disk_io_before = psutil.disk_io_counters
         img = cv2.imread(image_path)
+
         input_data = np.array(img).astype(np.float32)
         #input = input_name[0]
         if model_name != "nasnet.onnx":
@@ -450,9 +456,10 @@ def show_menu():
             print("11 Regnet")
             print("12 ConvNext")
             print("13 Nasnet")
-            print("14. EXIT")
+            print("14 YOLOv5")
+            print("15. EXIT")
 
-            choice = input("Enter your choice (1–14): ")
+            choice = input("Enter your choice (1–15): ")
 
             main_models = {
                 '1': "vgg.onnx",
@@ -467,12 +474,13 @@ def show_menu():
                 '10': "deeplab_part2.onnx",
                 '11': "regnet.onnx",
                 '12': "convnext.onnx",
-                '13': "nasnet.onnx"
+                '13': "nasnet.onnx",
+                '14': "yolov5.onnx"
             }
 
             if choice in main_models:
                 return main_models[choice]
-            elif choice == '14':
+            elif choice == '15':
                 print("Exiting the menu.")
                 break
             else:

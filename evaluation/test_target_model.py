@@ -280,7 +280,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
         result = detect.run(source=image_path,weights=model_path,save_csv=True)
         csv_path = "runs/detect/exp/predictions.csv"
         write_bytes = os.path.getsize(csv_path)
-        os.remove(csv_path)
+        os.remove("runs/detect/exp")
     if model_name == "deeplab_part1.onnx" or model_name == "deeplab.onnx" or model_name =="nasnet.onnx":
     #if len(input_name) == 1 and len(output_name) >=
         #disk_io_before = psutil.disk_io_counters

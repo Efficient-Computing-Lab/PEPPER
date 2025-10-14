@@ -277,7 +277,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
     write_bytes = 0
     if model_name =="yolov5.onnx":
         read_bytes = os.path.getsize(image_path)
-        result = detect.run(source=image_path,weights=model_name)
+        result = detect.run(source=image_path,weights="best.onnx")
         write_bytes = sum(record.nbytes for record in result)
     if model_name == "deeplab_part1.onnx" or model_name == "deeplab.onnx" or model_name =="nasnet.onnx":
     #if len(input_name) == 1 and len(output_name) >=

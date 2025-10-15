@@ -102,3 +102,14 @@ def analyze_layers(graph):
     print("total_filters_details:", total_filters_details)
 
     return len(conv_layers), len(pool_layers), len(fc_layers), total_filters_details
+
+
+model_as_graph = load_model_as_graph("/home/gkorod/Downloads/best.onnx")
+conv_layers, pool_layers, fc_layers, total_filters_details = analyze_layers(model_as_graph)
+total_parameters, param_shapes = count_parameters(model_as_graph)
+print("conv_layers: "+ str(conv_layers))
+print("pool_layers: "+str(pool_layers))
+print("fc_layers: "+ str(fc_layers))
+print("total_filters_details: "+ str(total_filters_details))
+print("total_parameters: "+ str(total_parameters))
+print("param_shapes: "+ str(param_shapes))

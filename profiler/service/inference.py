@@ -1,3 +1,5 @@
+from shutil import disk_usage
+
 import pandas as pd
 import numpy as np
 import joblib
@@ -5,6 +7,7 @@ import random
 import sys
 from datetime import datetime
 from collections import defaultdict
+
 
 
 TARGET_COLUMN_NAME = 'execution_time'  # continuous target
@@ -189,6 +192,19 @@ def model_characteristics(model_name, device_type, device_cpu_usage, disk_usage)
             'pool_layers': 1,
             'total_parameters': 88591464
         }
+    elif model_name =="yolov5.onnx":
+        characteristics ={
+            'conv_layers': 60,
+            'device_load_percent': device_cpu_usage,
+            'device': device_type,
+            'disk_io_read_bytes': 67131,
+            'disk_io_write_bytes': 427,
+            'device_disk_usage_percent': disk_usage,
+            'filter_details': 9567,
+            'fully_conn_layers': 0,
+            'pool_layers': 3,
+            'total_parameters': 7015519
+        }
     else:
         print("You provided a wrong model")
         sys.exit(0)
@@ -198,12 +214,12 @@ def model_characteristics(model_name, device_type, device_cpu_usage, disk_usage)
 def main():
     model_path = '../../best_trained_xgboost_model.joblib'
 
-    model_names = ["deeplab.onnx"]
+    model_names = ["yolov5.onnx"]
 
     device_csvs = [
-        ("/home/gkorod/evaluation/inference-regnet.onnx-raspberrypi.csv", 0, "RaspberryPi 4B master"),
-        ("/home/gkorod/evaluation/inference-regnet.onnx-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
-        ("/home/gkorod/evaluation/inference-regnet.onnx-jetson.csv", 1, "Jetson Nano"),
+        ("/home/gkorod/evaluation/inference-yolov5.onnx-raspberrypi-master.csv", 0, "RaspberryPi 4B master"),
+        ("/home/gkorod/evaluation/inference-yolov5.onnx-raspberrypi-worker.csv", 0, "RaspberryPi 4B worker"),
+        ("/home/gkorod/evaluation/inference-yolov5.onnx-jetson.csv", 1, "Jetson Nano"),
     ]
 
     try:

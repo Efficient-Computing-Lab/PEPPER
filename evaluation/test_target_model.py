@@ -591,8 +591,9 @@ if __name__ == '__main__':
         print(f"Profiling {model_name}")
         print(f"Iteration: {runs}")
         print('-' * 50)
-        random_cpu_load = random.randint(20, 80)
-        random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
+        random_cpu_load = random.randint(70, 90)
+        #random_cpu_cores = random.randint(1, 4)  # Use 1–4 to avoid cpu=0
+        random_cpu_cores =4
         stresser.start_stresser(random_cpu_cores, random_cpu_load)
         time.sleep(15)
         stresser.get_metrics(random_cpu_cores, random_cpu_load)

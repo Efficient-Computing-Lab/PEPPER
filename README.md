@@ -20,3 +20,4 @@ can be achieved in such environments.
 1. [Model Extractor Characteristics](/model_characteristics_extractor/README.md)
 2. [Profiler](/profiler/README.md)
 3. Model Splitter (to be added)
+4. [EdgeCloud Mon as monitoring mechanism](https://github.com/Efficient-Computing-Lab/EdgeCloud-Mon)

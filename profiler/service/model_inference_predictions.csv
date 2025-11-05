@@ -1,101 +1,101 @@
 model,run_number,actual_fastest_device,predicted_fastest_device,random_selection_device,prediction_was_correct,random_was_fastest
-yolov5.onnx,1,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,2,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,3,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,1,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,2,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,3,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
 yolov5.onnx,4,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,5,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,6,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,7,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,8,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,9,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,10,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
-yolov5.onnx,11,RaspberryPi 4B worker,Jetson Nano,RaspberryPi 4B worker,False,True
-yolov5.onnx,12,RaspberryPi 4B master,RaspberryPi 4B worker,RaspberryPi 4B master,False,True
-yolov5.onnx,13,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
-yolov5.onnx,14,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,15,RaspberryPi 4B master,RaspberryPi 4B worker,Jetson Nano,False,False
+yolov5.onnx,5,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,6,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,7,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,8,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,9,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,10,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,11,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,12,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,13,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,14,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,15,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
 yolov5.onnx,16,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,17,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,18,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,19,RaspberryPi 4B worker,Jetson Nano,RaspberryPi 4B worker,False,True
-yolov5.onnx,20,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,21,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
-yolov5.onnx,22,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,23,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B master,False,False
-yolov5.onnx,24,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,25,Jetson Nano,RaspberryPi 4B worker,Jetson Nano,False,True
-yolov5.onnx,26,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,27,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,28,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
-yolov5.onnx,29,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
-yolov5.onnx,30,Jetson Nano,RaspberryPi 4B master,RaspberryPi 4B worker,False,False
-yolov5.onnx,31,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,17,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,18,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,19,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,20,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,21,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,22,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,23,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,24,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,25,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,26,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,27,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,28,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,29,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,30,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,31,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
 yolov5.onnx,32,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,33,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
-yolov5.onnx,34,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
-yolov5.onnx,35,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B worker,False,False
+yolov5.onnx,33,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,34,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,35,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
 yolov5.onnx,36,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,37,RaspberryPi 4B master,RaspberryPi 4B worker,RaspberryPi 4B worker,False,False
-yolov5.onnx,38,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
-yolov5.onnx,39,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,40,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
-yolov5.onnx,41,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,42,RaspberryPi 4B worker,RaspberryPi 4B worker,Jetson Nano,True,False
-yolov5.onnx,43,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B worker,False,False
+yolov5.onnx,37,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,38,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,39,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,40,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,41,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,42,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,43,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
 yolov5.onnx,44,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,45,RaspberryPi 4B master,RaspberryPi 4B worker,RaspberryPi 4B master,False,True
-yolov5.onnx,46,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,47,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,48,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
-yolov5.onnx,49,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,50,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,51,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,52,RaspberryPi 4B master,RaspberryPi 4B worker,Jetson Nano,False,False
-yolov5.onnx,53,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,54,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,55,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,56,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,57,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
-yolov5.onnx,58,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B master,False,False
-yolov5.onnx,59,Jetson Nano,RaspberryPi 4B master,RaspberryPi 4B master,False,False
-yolov5.onnx,60,RaspberryPi 4B worker,Jetson Nano,RaspberryPi 4B worker,False,True
-yolov5.onnx,61,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B master,True,False
-yolov5.onnx,62,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,63,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,64,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
+yolov5.onnx,45,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,46,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,47,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,48,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,49,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,50,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,51,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,52,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
+yolov5.onnx,53,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,54,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,55,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,56,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,57,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,58,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,59,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,60,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,61,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,62,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,63,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,64,Jetson Nano,Jetson Nano,Jetson Nano,True,True
 yolov5.onnx,65,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,66,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B worker,False,False
-yolov5.onnx,67,RaspberryPi 4B worker,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,66,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,67,Jetson Nano,Jetson Nano,Jetson Nano,True,True
 yolov5.onnx,68,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,69,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,70,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,71,RaspberryPi 4B worker,Jetson Nano,RaspberryPi 4B worker,False,True
-yolov5.onnx,72,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,73,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
-yolov5.onnx,74,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
+yolov5.onnx,69,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,70,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,71,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,72,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,73,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,74,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
 yolov5.onnx,75,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,76,RaspberryPi 4B master,RaspberryPi 4B worker,RaspberryPi 4B master,False,True
-yolov5.onnx,77,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,78,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B master,False,False
-yolov5.onnx,79,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,80,Jetson Nano,RaspberryPi 4B master,RaspberryPi 4B worker,False,False
-yolov5.onnx,81,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B worker,False,False
-yolov5.onnx,82,RaspberryPi 4B master,RaspberryPi 4B master,Jetson Nano,True,False
-yolov5.onnx,83,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B worker,True,False
-yolov5.onnx,84,RaspberryPi 4B master,Jetson Nano,Jetson Nano,False,False
+yolov5.onnx,76,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,77,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,78,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,79,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,80,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,81,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,82,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,83,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,84,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
 yolov5.onnx,85,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,86,Jetson Nano,RaspberryPi 4B worker,Jetson Nano,False,True
-yolov5.onnx,87,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,88,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,89,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,90,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,91,RaspberryPi 4B worker,RaspberryPi 4B master,Jetson Nano,False,False
-yolov5.onnx,92,Jetson Nano,RaspberryPi 4B worker,RaspberryPi 4B master,False,False
-yolov5.onnx,93,RaspberryPi 4B master,RaspberryPi 4B master,RaspberryPi 4B master,True,True
-yolov5.onnx,94,Jetson Nano,Jetson Nano,Jetson Nano,True,True
-yolov5.onnx,95,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
-yolov5.onnx,96,RaspberryPi 4B worker,RaspberryPi 4B worker,RaspberryPi 4B worker,True,True
-yolov5.onnx,97,Jetson Nano,RaspberryPi 4B master,Jetson Nano,False,True
-yolov5.onnx,98,Jetson Nano,RaspberryPi 4B worker,Jetson Nano,False,True
-yolov5.onnx,99,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
-yolov5.onnx,100,Jetson Nano,RaspberryPi 4B master,RaspberryPi 4B worker,False,False
+yolov5.onnx,86,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,87,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,88,RaspberryPi 4B master,Jetson Nano,RaspberryPi 4B master,False,True
+yolov5.onnx,89,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,90,Jetson Nano,Jetson Nano,RaspberryPi 4B worker,True,False
+yolov5.onnx,91,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,92,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,93,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,94,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,95,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,96,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,97,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,98,Jetson Nano,Jetson Nano,RaspberryPi 4B master,True,False
+yolov5.onnx,99,Jetson Nano,Jetson Nano,Jetson Nano,True,True
+yolov5.onnx,100,Jetson Nano,Jetson Nano,Jetson Nano,True,True

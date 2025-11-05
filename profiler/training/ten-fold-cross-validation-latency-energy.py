@@ -18,7 +18,7 @@ from skorch import NeuralNetRegressor
 
 # --- Configuration ---
 CSV_DIRECTORY = "/home/gkorod/energy_dataset"
-TARGET_COLUMNS = ["execution_time", "cpu_energy_consumption"]
+TARGET_COLUMNS = ["cpu_energy_consumption"]
 FEATURE_COLUMNS = [
     'conv_layers', 'device_load_percent', 'disk_io_read_bytes',
     'disk_io_write_bytes', 'device_disk_usage_percent',

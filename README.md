@@ -1,17 +1,22 @@
-## Logistic Regression
+# PEPPER: Profiling-based Edge Placement and Partitioning for
+ 
+This repository provides the code for a pipeline
+is for profiling and partitioning ONNX models, to enhance
+inference efficiency across heterogeneous hardware platforms. Optimal split points within the deep learning models are identified
+through the application of Tarjan’s Bridge-Finding Algorithm, and
+the inference times of the models are predicted per device based on
+the respective characteristics and CPU load. For the prediction of
+inference times, the XGBoost algorithm is employed. The effectiveness of the proposed approach is validated through experiments
+conducted on real-world edge devices, demonstrating that highly efficient and adaptable deployment of complex deep learning models
+can be achieved in such environments.
 
-For our case we train our XGBoost model to consume every metric collected from profiling and predict the inference time of the provided model.
 
+## Architecture
 
-### Code
+![Architecture](./architecture.png)
 
-The code is based on Python 3.13.2. Make sure to us conda and install the package dependencies from the requirements.txt
-```bash
-source /opt/miniconda3/etc/profile.d/conda.sh
-conda activate logistics-regression
-pip install -r requirements.txt
-```
-to train the model run the following:
-```bash
-python3 main.py
-```
+### Components
+
+1. [Model Extractor Characteristics](/model_characteristics_extractor/README.md)
+2. [Profiler](/profiler/README.md)
+3. Model Splitter (to be added)

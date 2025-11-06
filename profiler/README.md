@@ -1,5 +1,5 @@
 # Profiler
-The AI model Optimizer (Profiler) takes as input the model(s) specifications and the resource characteristics of the cluster (e.g., CPU current load, disk usage, and device type) that consists of a varying number of edge devices. 
+The Profiler takes as input the model(s) specifications and the resource characteristics of the cluster (e.g., CPU current load, disk usage, and device type) that consists of a varying number of edge devices. 
 Finally, the Profiler predicts in which device of the cluster the model will run faster and places the model(s) in that device.
 
 

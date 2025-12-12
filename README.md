@@ -1,4 +1,4 @@
-# PEPPER: Profiling-based Edge Placement and Partitioning for
+# PEPPER: Profiling-based Edge Placement and Partitioning for Deep Learning Execution
  
 This repository provides the code for a pipeline
 is for profiling and partitioning ONNX models, to enhance

@@ -317,7 +317,7 @@ def run_model(model_name,session,input_name,output_name,runs,image_path=None):
             or model_name == "resnet_part1.onnx" or model_name == "vgg_part1.onnx" or model_name == "googlenet_part1.onnx"\
             or model_name == "densenet_part1.onnx" or model_name == "mobilenet_part1.onnx" or model_name == "efficientnet_part1.onnx"
             or model_name == "regnet.onnx" or model_name =="convnext.onnx"):
-        with open("profiler/training/labels/synset.txt", "r") as f:
+        with open("../profiler/training/labels/synset.txt", "r") as f:
             labels = [l.strip() for l in f]
         input_name = session.get_inputs()[0].name
         read_bytes = os.path.getsize(image_path)

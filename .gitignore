@@ -2,3 +2,12 @@
 .venv
 # Exclude all PDF files
 *.pdf
+__pycache__/
+*.onnx
+*.png
+*.graphml
+*.csv
+*.npy
+*.json
+*.zip
+*.env

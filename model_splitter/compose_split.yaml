@@ -1,0 +1,25 @@
+services:
+  model_splitter:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: model_split:latest
+    init: true
+    network_mode: host
+    runtime: nvidia  
+    environment:
+      - PYTHONUNBUFFERED=1 # otherwise output is not printed
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - MODELS_PATH_HOST=${MODELS_PATH_HOST}
+      - MODELS_PATH_CONTAINER=${MODELS_PATH_CONTAINER}
+    volumes:
+      - type: bind
+        source: ${MODELS_PATH_HOST}
+        target: ${MODELS_PATH_CONTAINER}
+        
+      # - type: bind
+      #   source: ${OUTPUTS_PATH}
+      #   target: ${OUTPUTS_PATH_CONTAINER}
+

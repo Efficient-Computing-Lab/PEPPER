@@ -29,7 +29,7 @@ docker compose -f compose_split.yaml --profile model_splitter up
 
 ### Send model and request splitting:
 ```
-curl -X POST http://localhost:5000/jobs   -F "model=@<path to model>"   -F "bridge_dist=<integer number>"
+curl -X POST http://localhost:5000/jobs/upload   -F "model=@<path to model>"   -F "bridge_dist=6" 
 ```
 Returns a json message with the job id and status ("pending")
 
@@ -42,5 +42,6 @@ Returns a zip file named `submodels.zip` with the model parts
 
 ### Request job status:
 ```
-curl http://localhost:5000/jobs/<job_id>
+curl http://localhost:5000/jobs/<job_id>/status
 ```
+Returns a json message with job status, model name

@@ -18,12 +18,11 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = "/root/models"
 OUTPUT_FOLDER = "/root/outputs"
-JOB_STATUS = {}  # {job_id: {"status": "pending"|"processing"|"done"|"error", "path": ...}}
+JOB_STATUS = {}  
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-#CHUNK_BUFFER = {}  # { job_id: { "chunks": {}, "total": N, "filename": str, "sid": str } }
 
 def sanitize_filename(name: str) -> str:
     # Only allow alphanumeric, dash, underscore, dot
@@ -32,8 +31,8 @@ def sanitize_filename(name: str) -> str:
 
 def sanitize_bridge_dist(bridge_dist):
     if not isinstance(bridge_dist, int) or bridge_dist < 0:
-        bridge_dist = 10
-        return bridge_dist
+        bridge_dist = 6
+    return bridge_dist
 
 
 def process_model(job_id, filename, bridge_dist):
@@ -46,10 +45,7 @@ def process_model(job_id, filename, bridge_dist):
         output_dir = os.path.join(OUTPUT_FOLDER, job_id)
         os.makedirs(output_dir, exist_ok=True)
         print(f"[PROCESS] Loading model from {model_path}")
-        
-
-            #inits_model = add_init(model)
-        
+   
         try:
             
             onnx.checker.check_model(model_path)
@@ -75,7 +71,7 @@ def process_model(job_id, filename, bridge_dist):
         JOB_STATUS[job_id]['error'] = str(e)
         print(f"[ERROR] Job error for job {job_id}: {e}")
 
-@app.route("/jobs", methods=["POST"])
+@app.route("/jobs/upload", methods=["POST"])
 def create_job():
     
     print("Headers:", dict(request.headers))
@@ -86,8 +82,8 @@ def create_job():
 
     model_file = request.files["model"]
     print("Client filename: ", model_file)
-    bridge_dist = int(request.form.get("bridge_dist", 10))
-
+    bridge_dist = sanitize_bridge_dist(int(request.form.get("bridge_dist")))
+    print(bridge_dist)
     job_id = str(uuid.uuid4())
 
     model_name_clean = sanitize_filename(model_file.filename)
@@ -98,7 +94,8 @@ def create_job():
     model_path = os.path.join(model_folder, filename)
     JOB_STATUS[job_id] = {
         "status": "pending",
-        "model_path": model_path
+        "model_path": model_path,
+        "model_name": model_name_clean
     }
     model_file.save(model_path)
 
@@ -115,13 +112,13 @@ def create_job():
     }), 202
 
 
-@app.route("/jobs/<job_id>", methods=["GET"])
+@app.route("/jobs/<job_id>/status", methods=["GET"])
 def job_status(job_id):
     job = JOB_STATUS.get(job_id)
     if not job:
         return jsonify({"error": "Job not found"}), 404
 
-    return jsonify(job["status"])
+    return jsonify({"status": job["status"], "model_name": job["model_name"]})
 
 
 @app.route("/jobs/<job_id>/submodels", methods=["POST"])

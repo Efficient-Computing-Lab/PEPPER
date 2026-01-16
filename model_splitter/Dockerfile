@@ -43,7 +43,7 @@ RUN pip3 install --upgrade pip setuptools wheel \
     sympy==1.13.3
 RUN pip3 install networkx
 RUN pip3 install eventlet flask flask-socketio
-RUN pip install "python-socketio[client]"
+RUN pip3 install lxml
 COPY ./service/splitter/ /root/splitter/
 COPY ./service/app.py /root/
 ENTRYPOINT ["/bin/bash", "-c", "python /root/app.py"]

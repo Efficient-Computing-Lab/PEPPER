@@ -122,6 +122,9 @@ class ModelSplitter:
         onnx.save(self.model, patched_model_path)
         self.model = onnx.load(patched_model_path)
         split_points, nx_graph = self.algo.find_split_points(self.model)
+        print(type(nx_graph))
+        output_file = os.path.join(output_dir, os.path.splitext(os.path.basename(patched_model_path))[0]+".graphml")
+        nx.write_graphml(nx_graph, output_file)
         return self.extract_sub_models(patched_model_path, split_points, output_dir, nx_graph)
 
 
